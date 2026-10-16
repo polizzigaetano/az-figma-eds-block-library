@@ -1,0 +1,28 @@
+{
+  "variantName": "media-container",
+  "version": "1.0.0",
+  "created": "2026-10-16T14:00:00.000Z",
+  "sourceContext": {
+    "source": "figma",
+    "figmaFileKey": "bPHhjDPGtrBR97OfQdj2tj",
+    "figmaNodeId": "928:325",
+    "figmaNodeName": "Media container",
+    "figmaUrl": "https://www.figma.com/design/bPHhjDPGtrBR97OfQdj2tj/OneAZ-Design-System-Pilot?node-id=928-325"
+  },
+  "visualCharacteristics": {
+    "density": "minimal",
+    "purpose": "media",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "1 image + optional video link",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "variants": {
+    "default": {
+      "options": ["video"],
+      "figmaNodeId": "928:323"
+    }
+  }
+}

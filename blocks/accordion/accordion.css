@@ -26,13 +26,13 @@
   --accordion-body-gap: 10px; /* spacing/2_5 */
 
   /* ===== TYPOGRAPHY: TITLE (mobile: Headings/Lexia-24) ===== */
-  --accordion-title-font-family: lexia, georgia, serif;
+  --accordion-title-font-family: var(--heading-font-family);
   --accordion-title-font-size: 1.5rem;
   --accordion-title-line-height: calc(31 / 24);
   --accordion-title-font-weight: 400;
 
   /* ===== TYPOGRAPHY: BODY (Body/Inter-16) ===== */
-  --accordion-body-font-family: inter, arial, sans-serif;
+  --accordion-body-font-family: var(--body-font-family);
   --accordion-body-font-size: 1rem;
   --accordion-body-line-height: 1.5;
   --accordion-body-font-weight: 400;

@@ -1,14 +1,17 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-// desktop layout from 1024px (see figma-breakpoints); tablet and mobile use the menu icon
-const isDesktop = window.matchMedia('(width >= 1024px)');
+// nav in the header from 768px (Desktop & Tablet Mega-menu); mobile uses the menu icon
+const isDesktop = window.matchMedia('(width >= 768px)');
 
 // show the profile menu and the Login button (the Figma component shows both)
 const SHOW_PROFILE = true;
 const SHOW_LOGIN = true;
 
+// Mega-menu: cascading columns (area → indication → product …)
 const MEGAMENU_COLUMNS = 4;
+// pointer rest before a hovered row reveals its sub-items, so moving across rows doesn't flicker
+const HOVER_DELAY = 150;
 
 let idCounter = 0;
 const nextId = (prefix) => {
@@ -57,26 +60,44 @@ const iconName = (link) => [...(link.querySelector('.icon')?.classList || [])]
   .find((c) => c.startsWith('icon-'))?.slice(5);
 
 /**
+ * Reads one list item and its nested list, recursively.
+ * @param {Element} li The list item
+ * @returns {object} { label, href, children, bold }
+ */
+function readNode(li) {
+  const sub = li.querySelector(':scope > ul');
+  const ownLink = li.querySelector(':scope > a, :scope > p > a, :scope > strong > a, :scope > p > strong > a');
+  const label = (ownLink?.textContent
+    || [...li.childNodes].filter((n) => n !== sub).map((n) => n.textContent).join(' ')).trim();
+  return {
+    label,
+    href: ownLink?.getAttribute('href'),
+    bold: !!ownLink?.closest('strong'),
+    children: sub ? [...sub.children].map(readNode).filter((node) => node.label) : [],
+  };
+}
+
+/**
  * Reads the main navigation list (nav document section 2).
+ * A nav item with a nested list opens a Mega-menu; deeper lists are its cascading levels.
+ * A bold link last in the first level is the Link button ("View all …").
  * @param {Element} section The section
- * @returns {object[]} Items: { label, href, type, links: [{ label, href }] }
+ * @returns {object[]} Items: { label, href, type, children, all }
  */
 function readNavItems(section) {
   const list = section?.querySelector('ul');
   if (!list) return [];
-  return [...list.children].map((li) => {
-    const sub = li.querySelector(':scope > ul');
-    const ownLink = [...li.querySelectorAll(':scope > a, :scope > p > a, :scope > strong > a')][0];
-    const label = (ownLink?.textContent
-      || [...li.childNodes].filter((n) => n !== sub).map((n) => n.textContent).join(' ')).trim();
-    const links = sub ? [...sub.querySelectorAll('a')].map((a) => ({ label: a.textContent.trim(), href: a.getAttribute('href') })) : [];
-    return {
-      label,
-      href: ownLink?.getAttribute('href'),
-      type: sub ? 'default' : 'simple',
-      links,
-    };
-  }).filter((item) => item.label);
+  return [...list.children].map(readNode).filter((item) => item.label).map((item) => {
+    const last = item.children.at(-1);
+    let all = null;
+    if (last?.bold && last.href && !last.children.length) {
+      all = { label: last.label, href: last.href };
+      item.children.pop();
+    } else if (item.href && item.children.length) {
+      all = { label: `View all ${item.label.toLowerCase()}`, href: item.href };
+    }
+    return { ...item, type: item.children.length ? 'default' : 'simple', all };
+  });
 }
 
 /**
@@ -138,6 +159,24 @@ function isCurrent(href) {
 }
 
 /**
+ * The rows to open so the current page's row is shown (when a panel opens).
+ * @param {object[]} nodes Rows of one level
+ * @returns {number[]|null} Index of the open row per level, or null when the page isn't here
+ */
+function currentPath(nodes) {
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    if (node.children.length) {
+      const below = currentPath(node.children);
+      if (below) return [i, ...below];
+    } else if (isCurrent(node.href)) {
+      return [];
+    }
+  }
+  return null;
+}
+
+/**
  * The language currently shown: the first URL segment if it's a language code, else <html lang>.
  * @param {object[]} languages Language links
  * @returns {string} Upper-case code
@@ -162,32 +201,109 @@ function buildLanguageSelector(languages) {
   return list;
 }
 
+/**
+ * A Mega-menu link row (a destination).
+ * @param {object} node { label, href }
+ * @returns {HTMLAnchorElement} The row
+ */
+function linkRow(node) {
+  const a = el('a', 'header-list-row', node.label);
+  a.href = node.href || '#';
+  if (isCurrent(node.href)) a.setAttribute('aria-current', 'page');
+  return a;
+}
+
+function buildLinkButton(all) {
+  const a = el('a', 'header-megamenu-all', all.label, icon('arrow-right'));
+  a.href = all.href;
+  return a;
+}
+
+/**
+ * Desktop & Tablet Mega-menu: cascading columns. Column 1 lists the item's rows; choosing a row
+ * with sub-items (click, Enter, or resting the pointer on it) shows them in the next column.
+ * @param {object} item Nav item
+ * @param {string} id Panel id
+ * @returns {HTMLElement} The panel, with reset() to call when it opens
+ */
 function buildMegaMenu(item, id) {
   const panel = el('div', 'header-megamenu');
   panel.id = id;
   panel.hidden = true;
   const inner = el('div', 'header-megamenu-inner');
   const columns = el('div', 'header-megamenu-columns');
-  const perColumn = Math.ceil(item.links.length / MEGAMENU_COLUMNS) || 1;
-  for (let c = 0; c < MEGAMENU_COLUMNS; c += 1) {
-    const links = item.links.slice(c * perColumn, (c + 1) * perColumn);
-    if (links.length) {
-      const ul = el('ul', 'header-megamenu-column');
-      links.forEach(({ label, href }) => {
-        const a = el('a', 'header-list-row', label);
-        a.href = href || '#';
-        if (isCurrent(href)) a.setAttribute('aria-current', 'page');
-        ul.append(el('li', '', a));
-      });
-      columns.append(ul);
+  let path = [];
+  let hoverTimer;
+
+  const levelNodes = (level) => {
+    let nodes = item.children;
+    for (let l = 0; l < level; l += 1) nodes = nodes[path[l]]?.children || [];
+    return nodes;
+  };
+
+  // shows the rows of a deeper level and hides the levels below it
+  let render;
+  const showLevel = (column, level, index) => {
+    path = index === undefined ? path.slice(0, level) : [...path.slice(0, level), index];
+    column.querySelectorAll('.header-list-parent').forEach((b) => {
+      b.setAttribute('aria-expanded', String(Number(b.dataset.index) === index));
+    });
+    render(level + 1);
+  };
+
+  // pointer rest (mouse only) before a row changes the levels shown
+  const onRest = (row, action) => {
+    row.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(action, HOVER_DELAY);
+    });
+    row.addEventListener('pointerleave', () => clearTimeout(hoverTimer));
+  };
+
+  const buildColumn = (level, nodes) => {
+    const column = el('ul', 'header-megamenu-column');
+    nodes.forEach((node, index) => {
+      let row;
+      if (node.children.length && level < MEGAMENU_COLUMNS - 1) {
+        row = el('button', 'header-list-row header-list-parent', node.label);
+        row.type = 'button';
+        row.dataset.index = index;
+        row.setAttribute('aria-expanded', String(path[level] === index));
+        const select = () => {
+          if (path[level] !== index) showLevel(column, level, index);
+        };
+        row.addEventListener('click', select);
+        onRest(row, select);
+      } else {
+        row = linkRow(node);
+        // resting on a destination closes deeper levels opened from another row
+        onRest(row, () => {
+          if (path.length > level) showLevel(column, level);
+        });
+      }
+      column.append(el('li', '', row));
+    });
+    return column;
+  };
+
+  // rebuilds the columns from `from` onwards; earlier columns (and the focused row) stay
+  render = (from) => {
+    [...columns.children].slice(from).forEach((column) => column.remove());
+    for (let level = from; level < MEGAMENU_COLUMNS; level += 1) {
+      const nodes = levelNodes(level);
+      if (!nodes.length) break;
+      columns.append(buildColumn(level, nodes));
     }
-  }
+  };
+
+  panel.reset = () => {
+    path = currentPath(item.children) || [];
+    render(0);
+  };
+
   inner.append(columns);
-  if (item.href) {
-    const all = el('a', 'header-megamenu-all', `View all ${item.label.toLowerCase()}`, icon('arrow-right'));
-    all.href = item.href;
-    inner.append(all);
-  }
+  if (item.all) inner.append(buildLinkButton(item.all));
   panel.append(inner);
   return panel;
 }
@@ -232,7 +348,10 @@ function togglePanel(nav, toggle) {
   closeAll(nav, toggle);
   toggle.setAttribute('aria-expanded', String(open));
   const panel = document.getElementById(toggle.getAttribute('aria-controls'));
-  if (panel) panel.hidden = !open;
+  if (panel) {
+    if (open) panel.reset?.();
+    panel.hidden = !open;
+  }
   toggle.closest('.header-item')?.classList.toggle('active', open);
   const chevron = toggle.querySelector('.icon-chevron-down, .icon-chevron-up');
   if (chevron) {
@@ -243,74 +362,95 @@ function togglePanel(nav, toggle) {
 }
 
 /**
- * Tablet/mobile panel: nav items as Dropdown "List item group" rows, then the tools.
+ * Mobile panel (Mega-menu_Mobile): the nav items, then the tools. Rows with sub-items have a
+ * chevron and open their level in place, with a Back button and the sub-category title.
  */
 function buildMobilePanel(items, tools, id) {
   const panel = el('div', 'header-mobile-panel');
   panel.id = id;
   panel.hidden = true;
-  const list = el('ul', 'header-mobile-list');
-  items.forEach((item) => {
-    const li = el('li', `header-mobile-item ${item.type}`);
-    if (item.type === 'default') {
-      const groupId = nextId('header-group');
-      const button = el('button', 'header-list-row header-group-toggle', el('span', '', item.label), icon('chevron-right'));
-      button.type = 'button';
-      button.setAttribute('aria-expanded', 'false');
-      button.setAttribute('aria-controls', groupId);
-      const children = el('ul', 'header-group-children');
-      children.id = groupId;
-      children.hidden = true;
-      [...item.links, ...(item.href ? [{ label: `View all ${item.label.toLowerCase()}`, href: item.href }] : [])]
-        .forEach(({ label, href }) => {
-          const a = el('a', 'header-list-row', label);
-          a.href = href || '#';
-          children.append(el('li', '', a));
-        });
-      button.addEventListener('click', () => {
-        const open = button.getAttribute('aria-expanded') !== 'true';
-        button.setAttribute('aria-expanded', String(open));
-        children.hidden = !open;
-        const chevron = button.querySelector('.icon');
-        const name = open ? 'chevron-down' : 'chevron-right';
-        chevron.className = `icon icon-${name}`;
-        chevron.style.setProperty('--icon-url', `url("${window.hlx?.codeBasePath || ''}/icons/${name}.svg")`);
-      });
-      li.append(button, children);
-    } else {
-      const a = el('a', 'header-list-row', item.label);
-      a.href = item.href || '#';
-      if (isCurrent(item.href)) a.setAttribute('aria-current', 'page');
-      li.append(a);
-    }
-    list.append(li);
-  });
-  if (SHOW_PROFILE && tools.profile) {
-    tools.profile.items.forEach(({ label, href }) => {
-      const a = el('a', 'header-list-row', label);
-      a.href = href || '#';
-      list.append(el('li', 'header-mobile-item simple', a));
-    });
-  }
-  panel.append(list);
+  const view = el('div', 'header-mobile-view');
+  panel.append(view);
+  let stack = []; // the rows opened, from the nav item down
+  let returnLabel = null; // re-focus the row we came back from
 
-  const extras = el('div', 'header-mobile-extras');
-  if (tools.utility.length) {
-    const utility = el('ul', 'header-utility-links');
-    tools.utility.forEach(({ label, href }) => {
-      const a = el('a', '', label);
-      a.href = href || '#';
-      utility.append(el('li', '', a));
+  // a row: drills down when it has sub-items, otherwise a link
+  const mobileRow = (node, depth) => {
+    if (node.children.length) {
+      const button = el('button', 'header-list-row header-list-parent', el('span', '', node.label), icon('chevron-right'));
+      button.type = 'button';
+      button.addEventListener('click', () => {
+        stack = [...stack.slice(0, depth), node];
+        // eslint-disable-next-line no-use-before-define
+        render();
+        view.querySelector('.header-mobile-back')?.focus();
+      });
+      return button;
+    }
+    return linkRow(node);
+  };
+
+  const buildRoot = () => {
+    const list = el('ul', 'header-mobile-list');
+    items.forEach((item) => list.append(el('li', '', mobileRow(item, 0))));
+    if (SHOW_PROFILE && tools.profile) {
+      tools.profile.items.forEach((node) => list.append(el('li', '', linkRow(node))));
+    }
+    const fragment = [list];
+    const extras = el('div', 'header-mobile-extras');
+    if (tools.utility.length) {
+      const utility = el('ul', 'header-utility-links');
+      tools.utility.forEach(({ label, href }) => {
+        const a = el('a', '', label);
+        a.href = href || '#';
+        utility.append(el('li', '', a));
+      });
+      extras.append(utility);
+    }
+    if (tools.languages.length) extras.append(buildLanguageSelector(tools.languages));
+    if (SHOW_LOGIN && tools.login) {
+      const login = el('a', 'button secondary', tools.login.label);
+      login.href = tools.login.href || '#';
+      extras.append(login);
+    }
+    if (extras.children.length) fragment.push(extras);
+    return fragment;
+  };
+
+  const buildLevel = () => {
+    const node = stack.at(-1);
+    const back = el('button', 'button tertiary small header-mobile-back', icon('arrow-left'), 'Back');
+    back.type = 'button';
+    back.addEventListener('click', () => {
+      returnLabel = node.label;
+      stack = stack.slice(0, -1);
+      // eslint-disable-next-line no-use-before-define
+      render();
     });
-    extras.append(utility);
-  }
-  if (tools.languages.length) extras.append(buildLanguageSelector(tools.languages));
-  if (SHOW_LOGIN && tools.login) {
-    const login = el('a', 'button secondary', tools.login.label);
-    login.href = tools.login.href || '#';
-    extras.append(login);
-  }
-  if (extras.children.length) panel.append(extras);
+    const title = el('p', 'header-mobile-title', node.label);
+    title.id = nextId('header-mobile-title');
+    const list = el('ul', 'header-mobile-list');
+    list.setAttribute('aria-labelledby', title.id);
+    node.children.forEach((child) => list.append(el('li', '', mobileRow(child, stack.length))));
+    const column = el('div', 'header-mobile-column', title, list);
+    const fragment = [el('div', 'header-mobile-back-row', back), column];
+    if (stack.length === 1 && node.all) fragment.push(el('div', 'header-mobile-all', buildLinkButton(node.all)));
+    return fragment;
+  };
+
+  const render = () => {
+    view.replaceChildren(...(stack.length ? buildLevel() : buildRoot()));
+    if (returnLabel) {
+      [...view.querySelectorAll('.header-list-parent')].find((b) => b.textContent.trim() === returnLabel)?.focus();
+      returnLabel = null;
+    }
+  };
+
+  panel.reset = () => {
+    stack = [];
+    render();
+  };
+  panel.reset();
   return panel;
 }
 
@@ -421,7 +561,7 @@ export default async function decorate(block) {
     controls.append(login);
   }
 
-  // tablet/mobile menu
+  // mobile menu
   const mobileId = nextId('header-mobile');
   const menuButton = el('button', 'header-icon-button header-menu-toggle', icon('bars'));
   menuButton.type = 'button';
@@ -435,7 +575,9 @@ export default async function decorate(block) {
     menuButton.setAttribute('aria-expanded', String(open));
     menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menuButton.replaceChildren(icon(open ? 'close' : 'bars'));
+    if (open) mobilePanel.reset();
     mobilePanel.hidden = !open;
+    nav.classList.toggle('header-menu-open', open);
   });
 
   mainInner.append(brand, sectionsList, controls);

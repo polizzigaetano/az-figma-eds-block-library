@@ -190,6 +190,7 @@ header .header .header-item-label {
   font-size: 14px;
   font-weight: 400;
   line-height: 16px;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -308,8 +309,10 @@ header .header .header-megamenu-column:not(:last-child) {
   border-inline-end: var(--header-border);
 }
 
-header .header .header-megamenu-column:not(:first-child) {
-  padding-inline-start: 16px;
+/* a row with sub-items stays highlighted while its level is shown in the next column */
+header .header .header-megamenu .header-list-parent[aria-expanded="true"] {
+  background-color: var(--header-row-hover);
+  color: var(--header-color-hover-text);
 }
 
 header .header .header-megamenu-all:any-link {
@@ -325,30 +328,61 @@ header .header .header-megamenu-all:any-link {
   text-decoration: underline;
 }
 
-/* ===== TABLET/MOBILE PANEL: Dropdown "List item group" rows ===== */
+/* ===== MOBILE PANEL (Mega-menu_Mobile): #F2F2F2, full-width rows, drill-down levels ===== */
+
+/* open: the header row turns grey with the logo and the close (×) button */
+header .header .header-menu-open .header-main {
+  background-color: var(--header-panel-background);
+}
+
+header .header .header-menu-open .header-search {
+  display: none;
+}
+
 header .header .header-mobile-panel {
   position: absolute;
   top: 100%;
   right: 0;
   left: 0;
-  max-height: calc(100dvh - 66px);
+  height: calc(100dvh - 66px);
   overflow-y: auto;
-  padding: 8px var(--header-padding-inline) 24px;
+  background-color: var(--header-panel-background);
+}
+
+header .header .header-mobile-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-block: 16px 24px;
+}
+
+/* rows span the panel; hover and pressed share the fill (mobile has no hover) */
+header .header .header-mobile-panel .header-list-row {
+  border-radius: 0;
+}
+
+header .header .header-mobile-panel .header-list-row:active {
+  background-color: var(--header-row-hover);
+  color: var(--header-color-hover-text);
+}
+
+header .header .header-mobile-panel .header-list-parent .icon {
+  color: var(--header-color);
+}
+
+header .header .header-mobile-back-row {
+  padding-inline: 16px;
+}
+
+/* Sub-category title: Inter SemiBold 16/24, #830051, line below */
+header .header .header-mobile-title {
+  margin: 0;
+  padding: 0 16px 8px;
   border-block-end: var(--header-border);
-  background-color: var(--header-background);
-}
-
-header .header .header-mobile-item {
-  border-block-end: 1px solid #e5e6e6; /* color/stroke/subtle */
-}
-
-header .header .header-group-children {
-  padding-inline-start: 16px;
-}
-
-/* stylelint-disable-next-line no-descending-specificity */
-header .header .header-group-children li {
-  border-block-start: 1px solid #e5e6e6;
+  color: var(--header-color-hover-text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
 header .header .header-mobile-extras {
@@ -356,18 +390,20 @@ header .header .header-mobile-extras {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  padding: 24px 16px 0;
+  padding: 8px 16px 0;
 }
 
-/* ===== TABLET (768px) ===== */
+/* stylelint-disable-next-line no-descending-specificity */
+header .header .header-mobile-extras .header-utility-links li:first-child {
+  padding-inline-start: 0;
+}
+
+/* ===== TABLET (768px) AND DESKTOP (1440px design): nav in the header, Desktop & Tablet Mega-menu ===== */
 @media (width >= 768px) {
   header {
     --header-padding-inline: 32px;
   }
-}
 
-/* ===== DESKTOP (1024px, 1440px design) ===== */
-@media (width >= 1024px) {
   header .header .header-utility {
     display: block;
   }
@@ -384,5 +420,16 @@ header .header .header-mobile-extras {
   header .header .header-menu-toggle,
   header .header .header-mobile-panel {
     display: none;
+  }
+}
+
+/* tablet: the Figma tablet header has no nav row, so nav items and controls sit closer to fit */
+@media (768px <= width < 1024px) {
+  header {
+    --header-controls-gap: 8px;
+  }
+
+  header .header .header-item-label {
+    padding-inline: 8px;
   }
 }

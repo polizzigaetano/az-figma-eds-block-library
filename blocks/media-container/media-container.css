@@ -1,0 +1,84 @@
+/* media-container block: oneAZ Figma Media container (928:325) */
+
+.media-container-container .media-container-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.media-container {
+  --media-container-max-width: 1180px;
+  --media-container-padding-inline: 16px;
+  --media-container-height: 375px; /* Breakpoint=Mobile: 343 × 375 */
+
+  /* play indicator (Image Placeholder / Video), same as the Teaser */
+  --media-container-play-width: 84px;
+  --media-container-play-height: 62px;
+  --media-container-play-background: rgb(0 0 0 / 50%); /* #00000080 */
+  --media-container-play-radius: 4px;
+  --media-container-play-icon-width: 29px;
+  --media-container-play-icon-height: 38.5px;
+  --media-container-play-icon-offset: 3.5px; /* Figma places the triangle 31px from the left of the 84px badge */
+  --media-container-play-icon-color: #efefef;
+  --media-container-focus-color: #830051; /* color/stroke/focus */
+
+  box-sizing: border-box;
+  max-width: calc(var(--media-container-max-width) + 2 * var(--media-container-padding-inline));
+  margin-inline: auto;
+  padding-inline: var(--media-container-padding-inline);
+}
+
+.media-container .media-container-media {
+  position: relative;
+  display: block;
+  height: var(--media-container-height);
+  overflow: hidden;
+}
+
+.media-container .media-container-media:focus-visible {
+  outline: 2px solid var(--media-container-focus-color);
+  outline-offset: 2px;
+}
+
+/* the image fills the area and is cropped from the centre */
+.media-container .media-container-media :is(picture, img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.media-container .media-container-media img {
+  object-fit: cover;
+}
+
+/* play indicator: 84 × 62px, 50% black, 4px corners, #EFEFEF triangle; centred */
+.media-container .media-container-play,
+.media-container .media-container-play::after {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: none;
+}
+
+.media-container .media-container-play {
+  width: var(--media-container-play-width);
+  height: var(--media-container-play-height);
+  border-radius: var(--media-container-play-radius);
+  background-color: var(--media-container-play-background);
+}
+
+.media-container .media-container-play::after {
+  content: '';
+  width: var(--media-container-play-icon-width);
+  height: var(--media-container-play-icon-height);
+  translate: var(--media-container-play-icon-offset) 0;
+  background-color: var(--media-container-play-icon-color);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* ===== TABLET (768px) AND DESKTOP (1440px design): Breakpoint=Desktop and Tablet, 600px tall ===== */
+@media (width >= 768px) {
+  .media-container {
+    --media-container-padding-inline: 32px;
+    --media-container-height: 600px;
+  }
+}

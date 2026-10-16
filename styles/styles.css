@@ -20,7 +20,7 @@
   --link-hover-color: #1d3ecf;
 
   /* fonts */
-  --body-font-family: inter, arial, sans-serif;
+  --body-font-family: inter, inter-fallback, arial, sans-serif;
   --heading-font-family: lexia, georgia, serif;
 
   /* body text: oneAZ Figma "Body" foundation, Inter Regular, all breakpoints */
@@ -73,16 +73,13 @@
   --nav-height: 66px; /* oneAZ header: 66px on tablet/mobile, 98px on desktop */
 }
 
-/* fallback fonts */
+/* fallback fonts: Arial sized to Inter's metrics, so text barely moves when Inter loads */
 @font-face {
-  font-family: roboto-condensed-fallback;
-  size-adjust: 88.82%;
-  src: local('Arial');
-}
-
-@font-face {
-  font-family: roboto-fallback;
-  size-adjust: 99.529%;
+  font-family: inter-fallback;
+  size-adjust: 107.12%;
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
   src: local('Arial');
 }
 
@@ -318,6 +315,184 @@ a:hover {
   color: var(--form-choice-link-color);
   font-weight: 400;
   text-decoration: underline;
+}
+
+/* oneAZ Figma Input field (752:11059): see styles/input-field/README.md */
+.input-field {
+  --input-field-color: #4f5555; /* color/fg/default */
+  --input-field-placeholder: #909898; /* color/graphite/400 */
+  --input-field-background: #fff; /* color/surface/input */
+  --input-field-border: #b0b5b5; /* color/stroke/default */
+  --input-field-typing: #d0006f; /* color/stroke/brand */
+  --input-field-focus: #830051; /* color/stroke/focus */
+  --input-field-error: #b91c1c; /* color/error/strong */
+  --input-field-disabled-background: #e5e6e6; /* color/surface/disabled */
+  --input-field-disabled-border: #d0d2d2;
+  --input-field-disabled-color: #b0b5b5; /* color/fg/disabled */
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 100%;
+  color: var(--input-field-color);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.input-field-label {
+  font-weight: 700;
+}
+
+/* .Input Field: 56px tall, 16px padding (the 1px stroke sits inside), 4px corners */
+.input-field-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 15px;
+  border: 1px solid var(--input-field-border);
+  border-radius: 4px;
+  background-color: var(--input-field-background);
+}
+
+.input-field-control :is(input, textarea) {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  caret-color: var(--input-field-typing);
+}
+
+.input-field-control :is(input, textarea):focus {
+  outline: none;
+}
+
+.input-field-control :is(input, textarea)::placeholder {
+  color: var(--input-field-placeholder);
+  opacity: 1;
+}
+
+/* Clear icon: 20px close, shown in Type in */
+.input-field-clear {
+  display: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: var(--input-field-color);
+  mask: url("/icons/close.svg") center / contain no-repeat;
+  cursor: pointer;
+}
+
+/* .Input Textarea (767:12761): label, field and bottom row with no gaps */
+.input-field:has(textarea) {
+  --input-field-counter: #767f7f; /* color/fg/placeholder */
+  --input-field-resize: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%234f5555' d='M17.5 3.66667L3.6875 17.5L2.5 16.3125L16.3125 2.5L17.5 3.66667ZM17.5 12.0208L12.0208 17.5L10.8333 16.3125L16.3125 10.8333L17.5 12.0208Z'/%3E%3C/svg%3E");
+
+  gap: 0;
+}
+
+/* 153px field, text from the top; the field resizes vertically with the Figma corner handle */
+.input-field-control:has(textarea) {
+  align-items: stretch;
+  height: 153px;
+  min-height: 153px;
+  overflow: hidden;
+  resize: vertical;
+}
+
+.input-field-control textarea {
+  resize: none;
+}
+
+.input-field-control:has(textarea)::-webkit-resizer {
+  background: var(--input-field-resize) center / 20px no-repeat;
+}
+
+.input-field-bottom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.input-field-counter {
+  color: var(--input-field-counter);
+}
+
+/* Focused: field selected and empty, 1px ring 2px outside (304 × 60px, 6px corners) */
+.input-field-control:has(:is(input, textarea):focus:placeholder-shown) {
+  outline: 1px solid var(--input-field-focus);
+  outline-offset: 1px;
+}
+
+/* Type in: field selected with text, brand border and the clear icon (Error wins);
+   a selected textarea always has the brand border (its Focused state adds the ring) */
+/* stylelint-disable-next-line no-descending-specificity */
+.input-field-control:focus-within:has(:where(input):not(:placeholder-shown), textarea) {
+  border-color: var(--input-field-typing);
+}
+
+/* focus-within keeps the icon while it has keyboard focus */
+.input-field-control:focus-within:has(input:not(:placeholder-shown)) .input-field-clear {
+  display: block;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.input-field-clear:focus-visible {
+  outline: 1px solid var(--input-field-focus);
+  outline-offset: 1px;
+}
+
+/* Error: red border, supportive text below */
+.input-field-supportive {
+  display: none;
+  margin: 0;
+  color: var(--input-field-error);
+}
+
+/* textarea: supportive text on the left, counter on the right */
+.input-field-bottom .input-field-supportive {
+  flex: 1;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.input-field:has([aria-invalid="true"], :user-invalid) .input-field-control {
+  border-color: var(--input-field-error);
+}
+
+.input-field:has([aria-invalid="true"], :user-invalid) .input-field-supportive {
+  display: block;
+}
+
+/* Disabled: gray fill, not editable */
+/* stylelint-disable-next-line no-descending-specificity */
+.input-field-control:has(:disabled) {
+  border-color: var(--input-field-disabled-border);
+  background-color: var(--input-field-disabled-background);
+  color: var(--input-field-disabled-color);
+}
+
+.input-field-control:has(:disabled) :is(input, textarea)::placeholder {
+  color: var(--input-field-disabled-color);
+}
+
+.input-field-control :disabled {
+  cursor: not-allowed;
+}
+
+.input-field:has(textarea:disabled) {
+  --input-field-counter: var(--input-field-disabled-color);
+  --input-field-resize: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23b0b5b5' d='M17.5 3.66667L3.6875 17.5L2.5 16.3125L16.3125 2.5L17.5 3.66667ZM17.5 12.0208L12.0208 17.5L10.8333 16.3125L16.3125 10.8333L17.5 12.0208Z'/%3E%3C/svg%3E");
 }
 
 /* buttons */
@@ -603,7 +778,8 @@ main > .section:first-of-type {
   margin-top: 0;
 }
 
-@media (width >= 1024px) {
+/* the header shows its utility row from 768px */
+@media (width >= 768px) {
   :root {
     --nav-height: 98px;
   }

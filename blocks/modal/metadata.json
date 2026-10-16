@@ -1,0 +1,26 @@
+{
+  "variantName": "modal",
+  "version": "1.0.0",
+  "created": "2026-10-16T15:00:00.000Z",
+  "sourceContext": {
+    "source": "figma",
+    "figmaFileKey": "bPHhjDPGtrBR97OfQdj2tj",
+    "figmaNodeId": "624:6090",
+    "figmaNodeName": "Modal",
+    "figmaUrl": "https://www.figma.com/design/bPHhjDPGtrBR97OfQdj2tj/OneAZ-Design-System-Pilot?node-id=661-2592"
+  },
+  "visualCharacteristics": {
+    "density": "compact",
+    "purpose": "dialog"
+  },
+  "contentPattern": {
+    "structure": "heading + description + optional image(s) + up to 3 actions",
+    "buttonCount": 3,
+    "imageCount": "0-n"
+  },
+  "variants": {
+    "text-only": { "options": ["vertical"], "figmaNodeId": "624:6104" },
+    "text-image": { "options": ["vertical"], "figmaNodeId": "624:6131" },
+    "slot": { "options": ["vertical"], "figmaNodeId": "624:6091" }
+  }
+}

@@ -145,15 +145,16 @@ Figma: [Header](https://www.figma.com/design/bPHhjDPGtrBR97OfQdj2tj/OneAZ-Design
 ## Implementation
 
 - `blocks/header/header.js` loads the nav document (`/nav`, or the page's `Nav` metadata) and builds the header from it (see Authoring).
-- Desktop layout from 1024px; below that, the nav, utility row, profile and Login move into the menu panel opened by the menu icon (see `figma-breakpoints`).
+- Desktop layout from 768px: tablet shows the nav items, utility row, profile and Login in the header like desktop, and uses the Desktop & Tablet Mega-menu (decision 2026-10-16; the Figma tablet header itself only has search and the menu icon). Between 768 and 1023px the nav items and controls sit closer (8px item padding and control gap instead of 16/12) so they fit on one row. Mobile (below 768px) uses the menu icon.
 - **Default** nav items are buttons that open their Mega-menu (`aria-expanded`); the label turns magenta and the chevron flips (`chevron-up`) while open. Only one panel is open at a time; Escape or a click outside closes it.
 - **Simple** nav items are links; the item for the current page (or its section) is shown Active.
-- Mega-menu links are spread over up to four columns in order.
+- Nav labels stay on one line.
+- **Mega-menu:** cascading columns; see `styles/mega-menu/README.md`.
 - The profile button opens the Dropdown with the profile links.
 - Language selector: the current language (first URL segment such as `/de/`, otherwise the page language) is shown Active.
-- The header reserves 66px (tablet/mobile) or 98px (desktop) so the page doesn't jump while it loads; a disclaimer adds its own height.
+- The header reserves 66px (mobile) or 98px (tablet and desktop) so the page doesn't jump while it loads; a disclaimer adds its own height.
 - `SHOW_PROFILE` and `SHOW_LOGIN` at the top of `header.js` switch the profile menu and the Login button; both are on, as in the Figma component. The usage examples show Login when logged out and the profile when logged in, which can be wired to a sign-in state once one exists.
-- **Tablet/mobile menu panel:** not designed in Figma. It's built from the Dropdown: each Default item is a List item group row (tap to expand its links, chevron right → down), Simple items and profile links are rows, then the utility links, languages and the Login button.
+- **Mobile menu:** the Mega-menu_Mobile drill-down (see `styles/mega-menu/README.md`). While it's open the header row turns #F2F2F2 with the logo and the close (×) button; the search icon is hidden.
 
 ## Authoring
 
@@ -162,9 +163,13 @@ The nav document (`/nav` in Document Authoring), separated into sections with `-
 ```
 [AstraZeneca logo image, linked to /]
 ---
-- Products                       (a link to /products adds "View all products →")
-  - List item example            (links: the Mega-menu)
-  - …
+- Products                       (a nested list makes a Default item with a Mega-menu)
+  - Cardiovascular, Renal & Metabolism     (text with a nested list: opens the next column)
+    - Heart Failure
+      - Forxiga® (Dapagliflozin)         (links: destinations)
+    - Amyloidosis
+  - Oncology & Hematology
+  - **View all Medicines**       (optional: a bold link last = the Link button)
 - Therapeutic Areas
   - Respiratory & Immunology
   - …
@@ -181,5 +186,6 @@ DE  EN  FR  IT                   (links; two letters = language selector)
 This website is intended for UK Healthcare Professionals only. … (optional disclaimer)
 ```
 
-- Keep three to five top-level items.
+- Keep three to five top-level items (and short labels, so they fit on tablet).
+- Mega-menu levels: see `styles/mega-menu/README.md` (Authoring).
 - A market can use its own nav document with the page metadata `Nav` (e.g. `/ch/nav`).

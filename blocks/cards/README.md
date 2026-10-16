@@ -243,4 +243,4 @@ A Cards block whose rows aren't settings shows hand-written cards: each row is o
 
 ## Fonts
 
-Titles use Lexia and other text uses Inter, falling back to Georgia and Arial until the font files are added to the project.
+Titles use Lexia and other text uses Inter (the AstraZeneca fonts in `fonts/`).
