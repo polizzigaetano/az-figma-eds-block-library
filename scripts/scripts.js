@@ -10,6 +10,7 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  getMetadata,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -74,6 +75,21 @@ function buildWidgetAutoBlocks(main) {
 }
 
 /**
+ * Adds the dynamic breadcrumb at the top of the page (directly under the header)
+ * on pages two or more levels deep. Turn it off per page with metadata "Breadcrumb: off".
+ * @param {Element} main The container element
+ */
+function buildBreadcrumbAutoBlock(main) {
+  const depth = window.location.pathname.split('/').filter((s) => s && s !== 'index').length;
+  const setting = getMetadata('breadcrumb').toLowerCase();
+  if (depth < 2 || ['off', 'false', 'no', 'hidden'].includes(setting)) return;
+  if (main.querySelector('.breadcrumb')) return;
+  const firstSection = main.querySelector(':scope > div');
+  if (!firstSection) return;
+  firstSection.prepend(buildBlock('breadcrumb', ''));
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
@@ -97,6 +113,7 @@ function buildAutoBlocks(main) {
       });
     }
     buildWidgetAutoBlocks(main);
+    buildBreadcrumbAutoBlock(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -113,31 +130,52 @@ function decorateButtons(main) {
     const p = a.closest('p');
     const text = a.textContent.trim();
 
-    // quick structural checks
-    if (a.querySelector('img') || p.textContent.trim() !== text) return;
+    // quick structural checks (icons don't count as images)
+    const images = [...a.querySelectorAll('img')].filter((img) => !img.closest('.icon'));
+    const icons = [...a.querySelectorAll('.icon')];
+    if (images.length || p.textContent.trim() !== text) return;
+    if (!text && !icons.length) return;
 
     // skip URL display links
     try {
-      if (new URL(a.href).href === new URL(text, window.location).href) return;
+      if (text && new URL(a.href).href === new URL(text, window.location).href) return;
     } catch { /* continue */ }
 
     // require authored formatting for buttonization
     const strong = a.closest('strong');
     const em = a.closest('em');
-    if (!strong && !em) return;
+    const u = a.closest('u') || a.querySelector('u');
+    if (!strong && !em && !u) return;
 
     p.className = 'button-wrapper';
     a.className = 'button';
-    if (strong && em) { // high-impact call-to-action
-      a.classList.add('accent');
+    // icons are tinted with the label colour through a CSS mask
+    icons.forEach((icon) => {
+      const img = icon.querySelector('img');
+      if (img) icon.style.setProperty('--icon-url', `url("${img.src}")`);
+    });
+    if (!text) {
+      // Icon Only: the link needs an accessible name
+      a.classList.add('icon-only');
+      if (!a.getAttribute('aria-label')) {
+        const name = [...icons[0].classList].find((c) => c.startsWith('icon-'));
+        a.setAttribute('aria-label', a.title || (name ? name.slice(5).replace(/-/g, ' ') : 'button'));
+      }
+    }
+    if (strong && em) { // bold italic: Priority Tertiary
+      a.classList.add('tertiary');
       const outer = strong.contains(em) ? strong : em;
       outer.replaceWith(a);
     } else if (strong) {
       a.classList.add('primary');
       strong.replaceWith(a);
-    } else {
+    } else if (em) {
       a.classList.add('secondary');
       em.replaceWith(a);
+    } else { // underline: Priority Ghost
+      a.classList.add('ghost');
+      if (u.contains(a)) u.replaceWith(a);
+      else u.replaceWith(...u.childNodes);
     }
   });
 }

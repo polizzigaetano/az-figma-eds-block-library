@@ -1,0 +1,159 @@
+/* accordion block: values from accordion-measurements.txt and oneAZ Figma variables */
+
+.accordion-container .accordion-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.accordion {
+  /* ===== DESIGN SYSTEM COLORS ===== */
+  --accordion-color-title: #830051; /* color/fg/title */
+  --accordion-color-default: #4f5555; /* color/fg/default */
+  --accordion-color-surface: #fff; /* color/surface/white */
+  --accordion-color-border: #e5e6e6; /* color/stroke/subtle */
+  --accordion-color-focus: #830051; /* color/stroke/focus */
+
+  /* ===== LAYOUT ===== */
+  --accordion-max-width: 1440px;
+  --accordion-content-max-width: 1180px;
+  --accordion-border-width: 1px; /* border-1 */
+  --accordion-focus-width: 2px; /* stroke-width/focus */
+  --accordion-header-padding-top: 40px; /* Spacing/lg */
+  --accordion-header-padding-bottom: 20px; /* Spacing/big */
+  --accordion-padding-inline: 16px; /* Spacing/md */
+  --accordion-header-gap: 24px; /* Spacing/x-big */
+  --accordion-body-padding-block: 20px; /* Spacing/big */
+  --accordion-body-gap: 10px; /* spacing/2_5 */
+
+  /* ===== TYPOGRAPHY: TITLE (mobile: Headings/Lexia-24) ===== */
+  --accordion-title-font-family: lexia, georgia, serif;
+  --accordion-title-font-size: 1.5rem;
+  --accordion-title-line-height: calc(31 / 24);
+  --accordion-title-font-weight: 400;
+
+  /* ===== TYPOGRAPHY: BODY (Body/Inter-16) ===== */
+  --accordion-body-font-family: inter, arial, sans-serif;
+  --accordion-body-font-size: 1rem;
+  --accordion-body-line-height: 1.5;
+  --accordion-body-font-weight: 400;
+
+  /* ===== CHEVRON (General Icons) ===== */
+  --accordion-icon-size: 20px;
+  --accordion-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 6.5l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --accordion-transition-duration: 200ms;
+  --accordion-transition-timing: ease;
+
+  max-width: var(--accordion-max-width);
+  margin-inline: auto;
+}
+
+/* Figma strokes sit inside the frame, so the border doesn't add to the item size */
+.accordion .accordion-item {
+  background-color: var(--accordion-color-surface);
+  box-shadow: inset 0 0 0 var(--accordion-border-width) var(--accordion-color-border);
+}
+
+@media (forced-colors: active) {
+  .accordion .accordion-item {
+    border: var(--accordion-border-width) solid CanvasText;
+  }
+}
+
+/* stacked items share one border */
+.accordion .accordion-item + .accordion-item {
+  margin-block-start: calc(-1 * var(--accordion-border-width));
+}
+
+/* header: the whole row toggles the item */
+.accordion .accordion-item-label {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--accordion-header-padding-top) var(--accordion-header-padding-bottom);
+  padding-inline: var(--accordion-padding-inline);
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordion .accordion-item-label::-webkit-details-marker {
+  display: none;
+}
+
+.accordion .accordion-item-label:focus-visible {
+  outline: var(--accordion-focus-width) solid var(--accordion-color-focus);
+  outline-offset: calc(-1 * var(--accordion-focus-width));
+}
+
+.accordion .accordion-item-header {
+  display: flex;
+  align-items: center;
+  gap: var(--accordion-header-gap);
+  width: 100%;
+  max-width: var(--accordion-content-max-width);
+  font-family: var(--accordion-title-font-family);
+  font-size: var(--accordion-title-font-size);
+  font-weight: var(--accordion-title-font-weight);
+  line-height: var(--accordion-title-line-height);
+  color: var(--accordion-color-title);
+}
+
+.accordion .accordion-item-header > * {
+  flex: 1;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.accordion .accordion-item-header::after {
+  content: '';
+  flex: none;
+  width: var(--accordion-icon-size);
+  height: var(--accordion-icon-size);
+  margin-inline-start: auto;
+  background-color: var(--accordion-color-default);
+  mask: var(--accordion-icon) center / contain no-repeat;
+  transition: rotate var(--accordion-transition-duration) var(--accordion-transition-timing);
+}
+
+.accordion .accordion-item[open] .accordion-item-header::after {
+  rotate: 180deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion .accordion-item-header::after {
+    transition: none;
+  }
+}
+
+/* body */
+.accordion .accordion-item-body {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--accordion-body-padding-block);
+  padding-inline: var(--accordion-padding-inline);
+}
+
+.accordion .accordion-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--accordion-body-gap);
+  width: 100%;
+  max-width: var(--accordion-content-max-width);
+  font-family: var(--accordion-body-font-family);
+  font-size: var(--accordion-body-font-size);
+  font-weight: var(--accordion-body-font-weight);
+  line-height: var(--accordion-body-line-height);
+  color: var(--accordion-color-default);
+}
+
+.accordion .accordion-item-text > * {
+  margin: 0;
+}
+
+/* ===== TABLET (768px) AND DESKTOP (1440px design): Headings/Lexia-36 ===== */
+@media (width >= 768px) {
+  .accordion {
+    --accordion-title-font-size: 2.25rem;
+    --accordion-title-line-height: calc(46 / 36); /* Figma title box is 46px tall; collapsed item 106px */
+    --accordion-title-font-weight: 700;
+  }
+}

@@ -1,20 +1,153 @@
+/* footer block: oneAZ Figma Footer (339:2264) */
+
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  --footer-background: #fff;
+  --footer-border: 1px solid #f2f2f2; /* color/disabled */
+  --footer-color: #4f5555; /* color/fg/default */
+  --footer-focus-color: #830051; /* color/stroke/focus */
+  --footer-max-width: 1184px;
+  --footer-padding-block: 24px;
+  --footer-padding-inline: 16px;
+  --footer-column-width: 300px;
+  --footer-section-gap: 45px;
+  --footer-bottom-gap: 48px;
+  --footer-item-gap: 16px;
+  --footer-icon-size: 20px;
+  --footer-logo-height: 30px;
+
+  border-top: var(--footer-border);
+  background-color: var(--footer-background);
+  color: var(--footer-color);
+  font-size: 16px;
+  line-height: 24px;
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+footer .footer .footer-inner {
+  box-sizing: border-box;
+  max-width: calc(var(--footer-max-width) + 2 * var(--footer-padding-inline));
+  margin: 0 auto;
+  padding: var(--footer-padding-block) var(--footer-padding-inline);
 }
 
 footer .footer p {
   margin: 0;
 }
 
-@media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+/* mobile: single stack */
+footer .footer .footer-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--footer-section-gap);
+}
+
+/* brand: logo + intro text */
+footer .footer .footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--footer-item-gap);
+}
+
+footer .footer .footer-brand picture,
+footer .footer .footer-brand img {
+  display: block;
+  width: auto;
+  height: var(--footer-logo-height);
+}
+
+/* link columns: 16px between links */
+footer .footer .footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--footer-item-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer a:any-link {
+  color: var(--footer-color);
+  text-decoration: none;
+}
+
+footer .footer a:any-link:hover {
+  color: var(--footer-color);
+  text-decoration: underline;
+}
+
+footer .footer a:any-link:focus-visible {
+  outline: 2px solid var(--footer-focus-color);
+  outline-offset: 2px;
+}
+
+/* bottom row: social icons left, approval reference right */
+footer .footer .footer-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--footer-item-gap);
+  margin-block-start: var(--footer-bottom-gap);
+}
+
+footer .footer .footer-social {
+  display: flex;
+  align-items: center;
+  gap: var(--footer-item-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer .footer-social li {
+  display: flex;
+}
+
+footer .footer .footer-social .icon {
+  width: var(--footer-icon-size);
+  height: var(--footer-icon-size);
+  background-color: currentcolor;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+footer .footer .footer-social .icon img {
+  display: none;
+}
+
+footer .footer .footer-reference {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+/* ===== TABLET (768px): brand text above two link columns ===== */
+@media (width >= 768px) {
+  footer {
+    --footer-padding-block: 32px;
+    --footer-padding-inline: 32px;
+  }
+
+  footer .footer .footer-main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, var(--footer-column-width)));
+    justify-content: space-between;
+    gap: var(--footer-section-gap) var(--footer-item-gap);
+  }
+
+  footer .footer .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ===== DESKTOP (1440px design): brand block and two link columns in one row ===== */
+@media (width >= 1024px) {
+  footer {
+    --footer-padding-block: 40px;
+  }
+
+  footer .footer .footer-main {
+    grid-template-columns: repeat(3, minmax(0, var(--footer-column-width)));
+  }
+
+  footer .footer .footer-brand {
+    grid-column: auto;
   }
 }

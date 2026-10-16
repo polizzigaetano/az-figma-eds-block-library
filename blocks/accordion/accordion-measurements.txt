@@ -1,0 +1,52 @@
+VISUAL MEASUREMENT CHECKLIST FOR accordion
+==========================================
+Extracted from Figma file bPHhjDPGtrBR97OfQdj2tj, node 118:612 "Accordion"
+  Expanded=No, Desktop 118:610 | Expanded=No, Mobile 118:687
+  Expanded=Yes, Desktop 118:611 | Expanded=Yes, Mobile 118:692
+Date: 2026-10-15
+
+LAYOUT & DIMENSIONS
+☑ Container width: 1440px desktop / 375px mobile, full width (source: w-[1440px] / w-[375px])
+☑ Container height: collapsed 106px desktop / 91px mobile (source: metadata)
+☑ Header padding: top 40px right 16px bottom 20px left 16px (source: pt-[40px] pr-[16px] pb-[20px] pl-[16px])
+☑ Header inner max-width: 1180px, centred (source: max-w-[1180px] items-center)
+☑ Header gap title → icon: 24px (source: gap-[24px])
+☑ Content padding: 20px top/bottom, 16px left/right (source: px-[16px] py-[20px])
+☑ Content inner max-width: 1180px (source: max-w-[1180px])
+☑ Gap between paragraphs: 10px (source: Text gap-[10px])
+☑ Column count: 1 (source: flex-col)
+
+COLORS
+☑ Background: #ffffff (source: color/surface/white)
+☑ Border: #e5e6e6, 1px solid (source: border-[#e5e6e6], color/stroke/subtle)
+☑ Title color: #830051 (source: color/fg/title)
+☑ Body color: #4f5555 (source: color/fg/default)
+☑ Icon color: #4f5555 (source: Vector bg color/fg/default)
+☑ Focus ring: #830051, 2px (source: color/stroke/focus, stroke-width/focus)
+☑ Hover background: none (source: no hover state in Figma)
+
+TYPOGRAPHY
+☑ Title desktop+tablet: Lexia 700 36px / 42px (source: Headings/Lexia-36)
+☑ Title mobile: Lexia 400 24px / 31px (source: Headings/Lexia-24)
+☑ Title letter-spacing: 0 (source: no tracking class)
+☑ Title text-transform: none; font-style: normal (source: no classes)
+☑ Body: Inter 400 16px / 24px (source: Body/Inter-16)
+☑ Body letter-spacing: 0; font-style: normal (source: no classes)
+
+ICON
+☑ Chevron: 20 x 20 box, 16 x 9 glyph, pointing down when collapsed and up when expanded (source: General Icons 118:550 / 118:571, screenshot)
+
+BORDERS & RADIUS
+☑ Border width: 1px (source: border-[1px])
+☑ Border style: solid (source: border-solid)
+☑ Border radius: 0px (source: no rounded-* class)
+
+SHADOWS
+☑ Box-shadow: none (source: no shadow classes)
+
+EFFECTS & TRANSITIONS
+☑ Chevron rotation: 200ms ease (source: assumed, not in Figma; turned off for reduced motion)
+
+NOTES
+- The desktop title text box is 46px tall in Figma while the Lexia-36 style sets a 42px line height. The block uses a 46px line height, as the user asked on 2026-10-15, so a collapsed desktop item is 106px, matching Figma.
+- Figma shows each state as a separate box. In the block, stacked items share a single 1px border.
