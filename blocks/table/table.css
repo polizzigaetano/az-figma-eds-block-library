@@ -1,0 +1,194 @@
+/* table block: oneAZ Figma Table (829:12227) and Table / Cell (829:12120) */
+
+.table-container .table-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.table {
+  --table-max-width: 1180px;
+  --table-padding-inline: 16px;
+  --table-border: 1px solid #b0b5b5; /* color/stroke/default */
+  --table-color: #4f5555; /* color/fg/default */
+  --table-header-background: #ebefee; /* color/surface/secondary */
+  --table-light-background: #fff; /* color/surface/white: Cell Light */
+  --table-dark-background: #f9fbfa; /* color/surface/primary: Cell Dark */
+  --table-highlight-background: #f1dae6; /* color/surface/highlight */
+  --table-brand: #d0006f; /* color/surface/brand 1 */
+  --table-focus-color: #830051; /* color/stroke/focus */
+  --table-column-min: 192px; /* Mobile: the 768px tablet table, clipped (4 × 192) */
+
+  box-sizing: border-box;
+  max-width: calc(var(--table-max-width) + 2 * var(--table-padding-inline));
+  margin-inline: auto;
+  padding-inline: var(--table-padding-inline);
+}
+
+.table .table-scroll {
+  overflow-x: auto;
+}
+
+.table .table-scroll:focus-visible {
+  outline: 2px solid var(--table-focus-color);
+  outline-offset: 2px;
+}
+
+.table table {
+  width: 100%;
+  min-width: calc(var(--table-columns) * var(--table-column-min));
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: var(--table-color);
+}
+
+/* Table / Cell: 16px padding, 1px lines shared between cells (Figma cells overlap by 1px,
+   so rows step 52px: 21px text + 2 × 15px + 1px line) */
+.table :is(th, td) {
+  padding: 15px 16px;
+  border: var(--table-border);
+  background-color: var(--table-light-background);
+  text-align: start;
+  vertical-align: middle;
+}
+
+/* Header: #EBEFEE, Lexia Bold 14/17 */
+.table th {
+  background-color: var(--table-header-background);
+  font-family: var(--heading-font-family);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+}
+
+/* Cell Light / Cell Dark alternate; body text Inter Regular 14/21 */
+.table td {
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: var(--table-dark-background);
+}
+
+.table tbody tr td.highlight {
+  background-color: var(--table-highlight-background);
+}
+
+/* content: leading element, 12px, then the label with help and sort icons 4px apart */
+.table .table-cell-content,
+.table .table-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table .table-control {
+  cursor: pointer;
+}
+
+.table .table-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.table .table-label-text {
+  overflow-wrap: anywhere;
+}
+
+/* 16px icons, #4F5555 */
+.table .icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background-color: currentcolor;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+.table .icon img {
+  display: none;
+}
+
+/* sort and help: icon buttons with a 24px target around the 16px icon */
+.table :is(.table-sort, .table-help-button) {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: -4px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.table :is(.table-sort, .table-help-button):focus-visible {
+  outline: 2px solid var(--table-focus-color);
+  outline-offset: -2px;
+}
+
+.table th[aria-sort] .table-sort {
+  color: var(--table-brand);
+}
+
+/* help tooltip (not in Figma): dark label below the icon, so the scroll area doesn't clip it */
+.table .table-help {
+  position: relative;
+  display: inline-flex;
+}
+
+.table .table-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  z-index: 2;
+  display: none;
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #3f4444;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  translate: -50% 0;
+}
+
+.table .table-help:is(:hover, :focus-within, .open) .table-tooltip {
+  display: block;
+}
+
+/* Toggle: 28 × 16px pill; on = brand fill with the 12px white knob on the right */
+.table input.table-toggle {
+  --toggle-knob: radial-gradient(circle at 7px 50%, var(--table-color) 0 6px, transparent 6.5px);
+
+  width: 28px;
+  height: 16px;
+  border: 1px solid var(--table-color);
+  border-radius: 8px;
+  background: var(--toggle-knob) #fff;
+}
+
+.table input.table-toggle:checked {
+  --toggle-knob: radial-gradient(circle at calc(100% - 7px) 50%, #fff 0 6px, transparent 6.5px);
+
+  border-color: var(--table-brand);
+  background: var(--toggle-knob) var(--table-brand);
+}
+
+/* ===== TABLET AND DESKTOP: columns share the width; scrolls only with many columns ===== */
+@media (width >= 768px) {
+  .table {
+    --table-padding-inline: 32px;
+    --table-column-min: 120px;
+  }
+}

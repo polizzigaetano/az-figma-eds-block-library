@@ -181,16 +181,71 @@ function decorateButtons(main) {
 }
 
 /**
+ * Adds the character counter (0/100) to oneAZ textareas with a maxlength,
+ * in a bottom row next to the supportive text.
+ * @param {Element} control The .input-field-control holding the textarea
+ */
+function decorateTextareaCounter(control) {
+  const textarea = control.querySelector('textarea');
+  const field = control.closest('.input-field');
+  if (textarea.maxLength < 1 || !field || field.querySelector('.input-field-counter')) return;
+  const bottom = document.createElement('div');
+  bottom.className = 'input-field-bottom';
+  const supportive = field.querySelector('.input-field-supportive');
+  if (supportive) bottom.append(supportive);
+  const counter = document.createElement('span');
+  counter.className = 'input-field-counter';
+  counter.id = `${textarea.id || textarea.name || 'textarea'}-counter`;
+  bottom.append(counter);
+  control.after(bottom);
+  const describedBy = textarea.getAttribute('aria-describedby');
+  textarea.setAttribute('aria-describedby', describedBy ? `${describedBy} ${counter.id}` : counter.id);
+  const update = () => { counter.textContent = `${textarea.value.length}/${textarea.maxLength}`; };
+  textarea.addEventListener('input', update);
+  update();
+}
+
+/**
+ * Adds the Clear icon (shown in Type in) to oneAZ input fields
+ * and the character counter to textareas.
+ * Blocks that build forms call this on their own markup.
+ * @param {Element} container The element holding .input-field elements
+ */
+export function decorateInputFields(container) {
+  container.querySelectorAll('.input-field-control').forEach((control) => {
+    if (control.querySelector('textarea')) {
+      decorateTextareaCounter(control);
+      return;
+    }
+    const input = control.querySelector('input');
+    if (!input || control.querySelector('.input-field-clear')) return;
+    input.placeholder = input.placeholder || ' '; // :placeholder-shown drives Focused vs Type in
+    const clear = document.createElement('button');
+    clear.type = 'button';
+    clear.className = 'input-field-clear';
+    clear.setAttribute('aria-label', 'Clear');
+    // keep focus in the field, so Type in (and the icon) stays while clicking
+    clear.addEventListener('mousedown', (e) => e.preventDefault());
+    clear.addEventListener('click', () => {
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    });
+    control.append(clear);
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
-// eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateInputFields(main);
 }
 
 /**
@@ -221,7 +276,23 @@ async function loadEager(doc) {
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
+/**
+ * Links to a modal page (a path containing /modals/) open it as a modal dialog.
+ * @param {Element} element The container to listen on
+ */
+function autolinkModals(element) {
+  element.addEventListener('click', async (e) => {
+    const origin = e.target.closest('a');
+    if (origin?.href && new URL(origin.href).pathname.includes('/modals/')) {
+      e.preventDefault();
+      const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
+      openModal(origin.href);
+    }
+  });
+}
+
 async function loadLazy(doc) {
+  autolinkModals(doc);
   loadHeader(doc.querySelector('body > header'));
 
   const main = doc.querySelector('main');

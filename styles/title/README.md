@@ -32,4 +32,4 @@ Use the heading levels in the document (Heading 1 to Heading 6). No block is nee
 
 ## Fonts
 
-Headings use Lexia, falling back to Georgia until the Lexia font files are added to the project.
+Headings use Lexia (the AstraZeneca font in `fonts/`, see `styles/fonts.css`): Regular 400, Bold 700 and XBold 800. Lexia Medium (500) isn't in the set yet, so it shows as Regular.

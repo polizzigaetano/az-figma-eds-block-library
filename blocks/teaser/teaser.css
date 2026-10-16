@@ -21,7 +21,7 @@
   --teaser-border-radius: 0;
 
   /* ===== TYPOGRAPHY: HEADING ===== */
-  --teaser-heading-font-family: lexia, georgia, serif;
+  --teaser-heading-font-family: var(--heading-font-family);
   --teaser-heading-font-size: 1.5rem;
   --teaser-heading-line-height: calc(31 / 24);
   --teaser-heading-font-weight: 400;
@@ -31,7 +31,7 @@
   --teaser-heading-color: var(--teaser-color-title);
 
   /* ===== TYPOGRAPHY: BODY ===== */
-  --teaser-body-font-family: inter, arial, sans-serif;
+  --teaser-body-font-family: var(--body-font-family);
   --teaser-body-font-size: 1.125rem;
   --teaser-body-line-height: 1.5;
   --teaser-body-font-weight: 400;

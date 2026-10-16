@@ -126,4 +126,4 @@ Figma: [Breadcrumb](https://www.figma.com/design/bPHhjDPGtrBR97OfQdj2tj/OneAZ-De
 
 ## Fonts
 
-Labels use Inter, falling back to Arial until the Inter font files are added to the project.
+Labels use Inter (the AstraZeneca font in `fonts/`).

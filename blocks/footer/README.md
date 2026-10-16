@@ -104,4 +104,4 @@ XX-XXXX-01/2025
 ## Notes
 
 - The logo in Figma is only available as a PNG (252 × 60px for 126 × 30px). A vector SVG logo from the brand team would be sharper.
-- Inter falls back to Arial until the font files are added, so the intro text can wrap onto an extra line (the desktop footer is 315px instead of 292px high in the preview).
+- With the AstraZeneca fonts loaded the desktop footer is 293px high (292px in Figma).

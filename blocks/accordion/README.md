@@ -36,4 +36,4 @@ Accordion block from the oneAZ Design System.
 - Body: Inter 16/24, colour #4F5555. Paragraphs are 10px apart.
 - Header padding: 40px top, 20px bottom, 16px left and right. Body padding: 20px top and bottom. Content is capped at 1180px.
 - Border: 1px #E5E6E6 on white.
-- Headings use Lexia and body text uses Inter, falling back to Georgia and Arial until the font files are added to the project.
+- Headings use Lexia and body text uses Inter (the AstraZeneca fonts in `fonts/`).
