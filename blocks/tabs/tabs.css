@@ -1,0 +1,78 @@
+/* tabs block: oneAZ Figma Tabs (78:3882) and tab item (22:345) */
+
+.tabs-container .tabs-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.tabs {
+  --tabs-max-width: 1180px;
+  --tabs-page-padding: 16px;
+  --tabs-item-padding: 16px;
+  --tabs-color: #4f5555; /* color/fg/default */
+  --tabs-active-color: #d0006f; /* color/fg/link-hover */
+  --tabs-focus-color: #830051; /* color/stroke/focus */
+
+  /* the first label lines up with the page content; the tab's own padding sits outside it
+     (content-box: the width limit excludes the page padding) */
+  box-sizing: content-box;
+  max-width: calc(var(--tabs-max-width) + 2 * var(--tabs-item-padding));
+  margin-inline: auto;
+  padding-inline: calc(var(--tabs-page-padding) - var(--tabs-item-padding));
+}
+
+/* one row; scrolls sideways when the tabs are wider than the screen */
+.tabs .tabs-list {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs .tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* tab item: 37px, 16px left/right padding, Lexia Regular 14/18 */
+.tabs .tabs-tab {
+  flex: none;
+  box-sizing: border-box;
+  height: 37px;
+  margin: 0;
+  padding: 0 var(--tabs-item-padding);
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--tabs-color);
+  font-family: var(--heading-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Hover: brand text; Selected: brand text and a 1px brand underline */
+.tabs .tabs-tab:hover,
+.tabs .tabs-tab[aria-selected="true"] {
+  color: var(--tabs-active-color);
+}
+
+.tabs .tabs-tab[aria-selected="true"] {
+  border-bottom-color: var(--tabs-active-color);
+}
+
+.tabs .tabs-tab:focus-visible {
+  outline: 2px solid var(--tabs-focus-color);
+  outline-offset: -2px;
+}
+
+/* hidden tab panels stay hidden once their section has loaded */
+main > .section.tabs-panel[hidden] {
+  display: none !important;
+}
+
+@media (width >= 768px) {
+  .tabs {
+    --tabs-page-padding: 32px;
+  }
+}

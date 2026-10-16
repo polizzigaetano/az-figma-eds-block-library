@@ -31,4 +31,4 @@ Typography definition for different body text styles.
 
 ## Fonts
 
-Body text uses Inter, falling back to Arial until the Inter font files are added to the project.
+Body text uses Inter (the AstraZeneca font in `fonts/`, see `styles/fonts.css`). Inter Medium (500) and SemiBold (600) aren't in the font set yet, so they show as Regular and Bold.

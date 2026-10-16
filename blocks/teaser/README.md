@@ -70,4 +70,4 @@ Heights are minimums. The banner grows if the content needs more room.
 
 ## Fonts
 
-Headings use Lexia and body text uses Inter, falling back to Georgia and Arial until the font files are added to the project.
+Headings use Lexia and body text uses Inter (the AstraZeneca fonts in `fonts/`, see `styles/fonts.css`).
