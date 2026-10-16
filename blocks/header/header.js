@@ -72,7 +72,9 @@ function readNode(li) {
   return {
     label,
     href: ownLink?.getAttribute('href'),
-    bold: !!ownLink?.closest('strong'),
+    // bold link; on live pages it's in a paragraph, so the global button script has already
+    // turned it into a Primary button
+    bold: !!(ownLink?.closest('strong') || ownLink?.classList.contains('primary')),
     children: sub ? [...sub.children].map(readNode).filter((node) => node.label) : [],
   };
 }
