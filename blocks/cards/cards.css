@@ -1,27 +1,163 @@
-.cards > ul {
-  list-style: none;
+/* cards block: oneAZ Figma Cards Container (772:14572) and Card (124:2286) */
+
+.cards {
+  /* ===== CONTAINER ===== */
+  --cards-max-width: 1180px;
+  --cards-padding-block: 20px;
+  --cards-padding-inline: 16px;
+  --cards-gap: 16px;
+  --cards-columns: 1;
+
+  /* ===== CARD ITEM ===== */
+  --cards-card-background: #ebefee; /* color/surface/secondary */
+  --cards-card-radius: 8px;
+  --cards-card-image-height: 188px;
+  --cards-card-padding-block: 24px;
+  --cards-card-padding-inline: 16px;
+  --cards-card-gap: 16px;
+
+  /* ===== TYPOGRAPHY ===== */
+  --cards-title-font-family: var(--heading-font-family);
+  --cards-title-font-size: 24px;
+  --cards-title-line-height: 31px;
+  --cards-title-font-weight: 400;
+  --cards-title-color: #d0006f; /* color/fg/brand */
+  --cards-body-font-size: 18px;
+  --cards-body-line-height: 27px;
+  --cards-body-color: #4f5555; /* color/fg/default */
+  --cards-tag-font-size: 18px;
+  --cards-tag-line-height: 23px;
+  --cards-tag-font-weight: 700;
+  --cards-link-font-size: 16px;
+  --cards-link-line-height: 24px;
+  --cards-link-font-weight: 700;
+  --cards-link-color: #4f5555; /* color/fg/default */
+  --cards-focus-color: #830051; /* color/stroke/focus */
+
+  box-sizing: border-box;
+  max-width: calc(var(--cards-max-width) + 2 * var(--cards-padding-inline));
+  margin-inline: auto;
+  padding: var(--cards-padding-block) var(--cards-padding-inline);
+}
+
+.cards-container .cards-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.cards .cards-list {
+  display: grid;
+  grid-template-columns: repeat(var(--cards-columns), minmax(0, 1fr));
+  gap: var(--cards-gap);
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  list-style: none;
 }
 
-.cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+/* a dynamic container with no matching pages takes no space */
+.cards.cards-empty {
+  display: none;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
+/* ===== CARD ITEM ===== */
+.cards .cards-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--cards-card-radius);
+  overflow: hidden;
+  background-color: var(--cards-card-background);
 }
 
 .cards .cards-card-image {
-  line-height: 0;
+  height: var(--cards-card-image-height);
 }
 
-.cards > ul > li img {
+.cards .cards-card-image picture,
+.cards .cards-card-image img {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
+}
+
+.cards .cards-card-image img {
   object-fit: cover;
+}
+
+.cards .cards-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--cards-card-gap);
+  padding: var(--cards-card-padding-block) var(--cards-card-padding-inline);
+}
+
+.cards .cards-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cards-card-gap);
+}
+
+.cards .cards-card-text > * {
+  margin: 0;
+}
+
+.cards .cards-card-tag {
+  color: var(--cards-body-color);
+  font-size: var(--cards-tag-font-size);
+  font-weight: var(--cards-tag-font-weight);
+  line-height: var(--cards-tag-line-height);
+}
+
+.cards .cards-card-text :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--cards-title-color);
+  font-family: var(--cards-title-font-family);
+  font-size: var(--cards-title-font-size);
+  font-weight: var(--cards-title-font-weight);
+  line-height: var(--cards-title-line-height);
+}
+
+.cards .cards-card-text p:not(.cards-card-tag) {
+  color: var(--cards-body-color);
+  font-size: var(--cards-body-font-size);
+  line-height: var(--cards-body-line-height);
+}
+
+/* controls: button at the start, link at the end, wrapping when they don't fit */
+.cards .cards-card-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cards-card-gap);
+  margin-block-start: auto;
+}
+
+/* Link style: plain underlined text, no button container */
+.cards .cards-card-link:any-link {
+  color: var(--cards-link-color);
+  font-size: var(--cards-link-font-size);
+  font-weight: var(--cards-link-font-weight);
+  line-height: var(--cards-link-line-height);
+  text-decoration: underline;
+}
+
+.cards .cards-card-link:any-link:focus-visible {
+  outline: 2px solid var(--cards-focus-color);
+  outline-offset: 2px;
+}
+
+/* ===== TABLET (768px): two columns; card item uses the Desktop/Tablet values ===== */
+@media (width >= 768px) {
+  .cards {
+    --cards-columns: 2;
+    --cards-card-image-height: 220px;
+    --cards-card-padding-inline: 24px;
+  }
+}
+
+/* ===== DESKTOP (1440px design): three columns ===== */
+@media (width >= 1024px) {
+  .cards {
+    --cards-columns: 3;
+  }
 }

@@ -1,0 +1,13 @@
+/* chips block: a list of global chips (styles/chips/README.md) */
+
+.chips .chips-list {
+  --chips-gap: 8px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chips-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

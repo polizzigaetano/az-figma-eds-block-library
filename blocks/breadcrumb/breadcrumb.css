@@ -1,0 +1,111 @@
+/* breadcrumb block: oneAZ Figma Breadcrumb (354:2382) and Breadcrumb label (354:2368) */
+
+.breadcrumb-container .breadcrumb-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.breadcrumb {
+  --breadcrumb-height: 32px;
+  --breadcrumb-padding-inline: 16px;
+  --breadcrumb-content-max-width: 1184px;
+  --breadcrumb-gap: 2px;
+  --breadcrumb-background: #fff; /* Background-Supporting-2 */
+  --breadcrumb-border-width: 1px;
+  --breadcrumb-border-color: #ebefee; /* color/surface/secondary */
+  --breadcrumb-font-family: var(--body-font-family);
+  --breadcrumb-font-size: 12px;
+  --breadcrumb-line-height: 16px;
+  --breadcrumb-font-weight: 400;
+  --breadcrumb-color: #4f5555; /* color/fg/default */
+  --breadcrumb-color-active: #d0006f; /* color/fg/brand */
+  --breadcrumb-separator-size: 20px;
+  --breadcrumb-separator-color: #4f5555; /* color/fg/default */
+  --breadcrumb-focus-color: #830051; /* color/stroke/focus */
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  min-height: var(--breadcrumb-height);
+
+  /* Figma strokes sit inside the frame, so the border is part of the padding */
+  padding-inline: calc(var(--breadcrumb-padding-inline) - var(--breadcrumb-border-width));
+  border: var(--breadcrumb-border-width) solid var(--breadcrumb-border-color);
+  background-color: var(--breadcrumb-background);
+}
+
+.breadcrumb nav {
+  width: 100%;
+  max-width: var(--breadcrumb-content-max-width);
+  margin-inline: auto;
+}
+
+.breadcrumb .breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: var(--breadcrumb-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--breadcrumb-font-family);
+  font-size: var(--breadcrumb-font-size);
+  font-weight: var(--breadcrumb-font-weight);
+  line-height: var(--breadcrumb-line-height);
+  white-space: nowrap;
+
+  /* mobile: long trails scroll horizontally */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.breadcrumb .breadcrumb-item {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--breadcrumb-gap);
+}
+
+/* nav-arrow-right separator between items, not announced by screen readers */
+.breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+  content: '';
+  flex: none;
+  width: var(--breadcrumb-separator-size);
+  height: var(--breadcrumb-separator-size);
+  background-color: var(--breadcrumb-separator-color);
+  mask: url('../../icons/navarrow-right.svg') center / contain no-repeat;
+}
+
+/* Default: ancestor page (a level without its own page is shown as text) */
+.breadcrumb .breadcrumb-item .breadcrumb-missing,
+.breadcrumb .breadcrumb-item a:any-link {
+  color: var(--breadcrumb-color);
+  text-decoration: none;
+}
+
+.breadcrumb .breadcrumb-item a:any-link:focus-visible {
+  outline: 2px solid var(--breadcrumb-focus-color);
+  outline-offset: 2px;
+}
+
+/* Hover: brand magenta with underline, pointer devices only (mobile has no hover) */
+@media (hover: hover) {
+  .breadcrumb .breadcrumb-item a:any-link:hover {
+    color: var(--breadcrumb-color-active);
+    text-decoration: underline;
+  }
+}
+
+/* Active: the current page, not a link */
+.breadcrumb .breadcrumb-item [aria-current='page'] {
+  color: var(--breadcrumb-color-active);
+}
+
+/* ===== TABLET (768px) AND DESKTOP (1440px design) ===== */
+@media (width >= 768px) {
+  .breadcrumb {
+    --breadcrumb-height: 40px;
+    --breadcrumb-padding-inline: 32px;
+    --breadcrumb-gap: 8px;
+    --breadcrumb-font-size: 14px;
+  }
+}

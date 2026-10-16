@@ -1,0 +1,36 @@
+{
+  "variantName": "accordion",
+  "baseBlock": "accordion",
+  "version": "1.0.0",
+  "created": "2026-10-15T13:30:00.000Z",
+  "sourceContext": {
+    "source": "figma",
+    "figmaFileKey": "bPHhjDPGtrBR97OfQdj2tj",
+    "figmaNodeId": "118:612",
+    "figmaNodeName": "Accordion",
+    "figmaUrl": "https://figma.com/design/bPHhjDPGtrBR97OfQdj2tj?node-id=118-612"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "minimal",
+    "purpose": "faq",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "heading + body text, collapsible",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "variants": {
+    "default": { "options": ["expanded"] }
+  },
+  "reuseGuidance": {
+    "suitableFor": ["faq sections", "light backgrounds", "collapsible related content"],
+    "notSuitableFor": ["pages requiring images"]
+  },
+  "usage": {
+    "pagesUsing": ["accordion"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-15T13:30:00.000Z"
+  }
+}

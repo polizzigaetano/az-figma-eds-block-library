@@ -20,24 +20,57 @@
   --link-hover-color: #1d3ecf;
 
   /* fonts */
-  --body-font-family: roboto, roboto-fallback, sans-serif;
-  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  --body-font-family: inter, arial, sans-serif;
+  --heading-font-family: lexia, georgia, serif;
+
+  /* body text: oneAZ Figma "Body" foundation, Inter Regular, all breakpoints */
+  --body-color: #4f5555; /* color/fg/default */
+  --body-font-weight: 400; /* font-normal */
+  --body-line-height: 1.5; /* 150% */
 
   /* body sizes */
-  --body-font-size-m: 22px;
-  --body-font-size-s: 19px;
-  --body-font-size-xs: 17px;
+  --body-font-size-l: 18px; /* text-lg */
+  --body-font-size-m: 16px; /* text-base, default */
+  --body-font-size-s: 14px; /* text-sm, not in the Body foundation; used by nav and code */
+  --body-font-size-xs: 12px; /* text-xs */
+
+  /* headings: oneAZ Figma "Title" foundation (Font Styles H1 to H6), all breakpoints */
+  --heading-color: #3c4242; /* Text-Body-1 */
 
   /* heading sizes */
-  --heading-font-size-xxl: 55px;
-  --heading-font-size-xl: 44px;
-  --heading-font-size-l: 34px;
-  --heading-font-size-m: 27px;
-  --heading-font-size-s: 24px;
-  --heading-font-size-xs: 22px;
+  --heading-font-size-xxl: 60px; /* h1 */
+  --heading-font-size-xl: 48px; /* h2 */
+  --heading-font-size-l: 36px; /* h3 */
+  --heading-font-size-m: 24px; /* h4 */
+  --heading-font-size-s: 20px; /* h5 */
+  --heading-font-size-xs: 14px; /* h6 */
+
+  /* heading line heights (Figma "Auto") */
+  --heading-line-height-xxl: 76px;
+  --heading-line-height-xl: 56px;
+  --heading-line-height-l: 42px;
+  --heading-line-height-m: 31px;
+  --heading-line-height-s: 25px;
+  --heading-line-height-xs: 17px;
+
+  /* heading weights */
+  --heading-font-weight-xxl: 400;
+  --heading-font-weight-xl: 700;
+  --heading-font-weight-l: 700;
+  --heading-font-weight-m: 400;
+  --heading-font-weight-s: 400;
+  --heading-font-weight-xs: 700;
+
+  /* space after headings (Figma "Paragraph spacing") */
+  --heading-spacing-xxl: 0;
+  --heading-spacing-xl: 56px;
+  --heading-spacing-l: 32px;
+  --heading-spacing-m: 24px;
+  --heading-spacing-s: 24px;
+  --heading-spacing-xs: 18px;
 
   /* nav height */
-  --nav-height: 64px;
+  --nav-height: 66px; /* oneAZ header: 66px on tablet/mobile, 98px on desktop */
 }
 
 /* fallback fonts */
@@ -53,31 +86,15 @@
   src: local('Arial');
 }
 
-@media (width >= 900px) {
-  :root {
-    /* body sizes */
-    --body-font-size-m: 18px;
-    --body-font-size-s: 16px;
-    --body-font-size-xs: 14px;
-
-    /* heading sizes */
-    --heading-font-size-xxl: 45px;
-    --heading-font-size-xl: 36px;
-    --heading-font-size-l: 28px;
-    --heading-font-size-m: 22px;
-    --heading-font-size-s: 20px;
-    --heading-font-size-xs: 18px;
-  }
-}
-
 body {
   display: none;
   margin: 0;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--body-color);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-m);
-  line-height: 1.6;
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
 }
 
 body.appear {
@@ -85,7 +102,7 @@ body.appear {
 }
 
 header {
-  height: var(--nav-height);
+  min-height: var(--nav-height);
 }
 
 header .header,
@@ -105,19 +122,54 @@ h4,
 h5,
 h6 {
   margin-top: 0.8em;
-  margin-bottom: 0.25em;
+  color: var(--heading-color);
   font-family: var(--heading-font-family);
-  font-weight: 600;
-  line-height: 1.25;
+  font-style: normal;
+  letter-spacing: 0;
   scroll-margin: 40px;
 }
 
-h1 { font-size: var(--heading-font-size-xxl); }
-h2 { font-size: var(--heading-font-size-xl); }
-h3 { font-size: var(--heading-font-size-l); }
-h4 { font-size: var(--heading-font-size-m); }
-h5 { font-size: var(--heading-font-size-s); }
-h6 { font-size: var(--heading-font-size-xs); }
+h1 {
+  margin-bottom: var(--heading-spacing-xxl);
+  font-size: var(--heading-font-size-xxl);
+  font-weight: var(--heading-font-weight-xxl);
+  line-height: var(--heading-line-height-xxl);
+}
+
+h2 {
+  margin-bottom: var(--heading-spacing-xl);
+  font-size: var(--heading-font-size-xl);
+  font-weight: var(--heading-font-weight-xl);
+  line-height: var(--heading-line-height-xl);
+}
+
+h3 {
+  margin-bottom: var(--heading-spacing-l);
+  font-size: var(--heading-font-size-l);
+  font-weight: var(--heading-font-weight-l);
+  line-height: var(--heading-line-height-l);
+}
+
+h4 {
+  margin-bottom: var(--heading-spacing-m);
+  font-size: var(--heading-font-size-m);
+  font-weight: var(--heading-font-weight-m);
+  line-height: var(--heading-line-height-m);
+}
+
+h5 {
+  margin-bottom: var(--heading-spacing-s);
+  font-size: var(--heading-font-size-s);
+  font-weight: var(--heading-font-weight-s);
+  line-height: var(--heading-line-height-s);
+}
+
+h6 {
+  margin-bottom: var(--heading-spacing-xs);
+  font-size: var(--heading-font-size-xs);
+  font-weight: var(--heading-font-weight-xs);
+  line-height: var(--heading-line-height-xs);
+}
 
 p,
 dl,
@@ -153,6 +205,61 @@ button {
   font: inherit;
 }
 
+/* oneAZ Figma Checkbox & Radio Input: see styles/checkbox-radio/README.md */
+input:is([type="checkbox"], [type="radio"]) {
+  --input-size: 20px;
+  --input-border-width: 1px;
+  --input-border-color: #4f5555; /* color/stroke/strong */
+  --input-background: #fff;
+  --input-selected-color: #d0006f; /* color/surface/brand 1 */
+  --input-focus-color: #830051; /* color/stroke/focus */
+  --input-check-size: 16px;
+  --input-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23fff' d='M17.7177 4.30365C18.1023 4.70003 18.0927 5.33312 17.6964 5.7177L8.42035 14.7177C8.03242 15.0941 7.41563 15.0941 7.02769 14.7177L2.30369 10.1347C1.90729 9.75017 1.8977 9.11708 2.28226 8.72069C2.66683 8.32429 3.29992 8.3147 3.69632 8.69926L7.72397 12.6067L16.3037 4.2823C16.7 3.89771 17.3331 3.90728 17.7177 4.30365Z'/%3E%3C/svg%3E");
+
+  appearance: none;
+  box-sizing: border-box;
+  flex: none;
+  width: var(--input-size);
+  height: var(--input-size);
+  margin: 0;
+  border: var(--input-border-width) solid var(--input-border-color);
+  background-color: var(--input-background);
+  cursor: pointer;
+}
+
+/* Checkbox: 4px corners; Selected = brand fill with a white check */
+input[type="checkbox"] {
+  border-radius: 4px;
+}
+
+input[type="checkbox"]:checked {
+  border-color: var(--input-selected-color);
+  background: var(--input-check) center / var(--input-check-size) no-repeat var(--input-selected-color);
+}
+
+/* Radio: circle; Selected = brand border with a 10px brand dot */
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  border-color: var(--input-selected-color);
+  background: radial-gradient(circle, var(--input-selected-color) 0 5px, var(--input-background) 5.5px);
+}
+
+/* Focused: 1px ring 2px outside the control (24 × 24px) */
+input:is([type="checkbox"], [type="radio"]):focus-visible {
+  outline: 1px solid var(--input-focus-color);
+  outline-offset: 1px;
+}
+
+/* forced colors mode: keep the system checkbox and radio */
+@media (forced-colors: active) {
+  input:is([type="checkbox"], [type="radio"]) {
+    appearance: auto;
+  }
+}
+
 /* links */
 a:any-link {
   color: var(--link-color);
@@ -165,25 +272,104 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Checkbox Form (and Radio Form): control + label, see styles/checkbox-radio/README.md */
+.checkbox-form,
+.radio-form {
+  --form-choice-gap: 12px;
+  --form-choice-color: #4f5555; /* color/fg/default */
+  --form-choice-link-color: #d0006f; /* color/fg/brand */
+
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--form-choice-gap);
+  color: var(--form-choice-color);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+/* the 20px control sits on the 24px first line */
+/* stylelint-disable-next-line no-descending-specificity */
+:is(.checkbox-form, .radio-form) input {
+  margin-block: 2px;
+}
+
+.checkbox-form-content,
+.radio-form-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Checkbox Type = Regular and Radio Form: label in Inter Medium */
+.checkbox-form-label,
+.radio-form-label {
+  font-weight: 500;
+}
+
+/* Type = With secondary text: second line in Inter Regular */
+.checkbox-form-secondary {
+  font-weight: 400;
+}
+
+/* Type = Link: the label is a brand underlined link */
+.checkbox-form a:any-link {
+  color: var(--form-choice-link-color);
+  font-weight: 400;
+  text-decoration: underline;
+}
+
 /* buttons */
 p.button-wrapper {
   margin: 12px 0;
 }
 
+/* oneAZ Figma Button component: see styles/button/README.md */
 a.button:any-link,
 button.button {
+  /* size: Medium by default */
+  --button-height: 42px;
+  --button-padding-inline: 16px;
+  --button-gap: 8px;
+  --button-radius: 4px; /* radius/control */
+  --button-border-width: 1px;
+  --button-icon-size: 20px;
+  --button-font-size: 16px;
+  --button-line-height: 24px;
+  --button-font-weight: 700;
+
+  /* priority colours (default, hover, pressed); each priority overrides these */
+  --button-background: transparent;
+  --button-background-hover: transparent;
+  --button-background-pressed: transparent;
+  --button-border-color: transparent;
+  --button-color: inherit;
+
+  /* shared state colours */
+  --button-focus-ring: 0 0 0 2px #f8f8f8, 0 0 0 4px #830051; /* color/stroke/focus */
+  --button-disabled-background: #f2f2f2; /* color/disabled */
+  --button-disabled-border-color: #d0d2d2; /* color/stroke/disabled */
+  --button-disabled-color: #b0b5b5; /* color/fg/disabled */
+
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--button-gap);
   max-width: 100%;
+  min-height: var(--button-height);
   margin: 0;
-  border: 2px solid transparent;
-  border-radius: 2.4em;
-  padding: 0.5em 1.2em;
-  font: inherit;
-  font-weight: 500;
-  line-height: 1.25;
+  border: var(--button-border-width) solid var(--button-border-color);
+  border-radius: var(--button-radius);
+  padding: 0 var(--button-padding-inline);
+  background-color: var(--button-background);
+  color: var(--button-color);
+  font-family: var(--body-font-family);
+  font-size: var(--button-font-size);
+  font-style: normal;
+  font-weight: var(--button-font-weight);
+  line-height: var(--button-line-height);
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
@@ -191,91 +377,93 @@ button.button {
   white-space: nowrap;
 }
 
+/* sizes */
+a.button.small:any-link,
+button.button.small {
+  --button-height: 34px;
+  --button-font-size: 12px;
+  --button-line-height: 18px;
+  --button-font-weight: 500;
+}
+
+a.button.large:any-link,
+button.button.large {
+  --button-height: 54px;
+}
+
+/* Icon Only: square, 0px padding, centred icon */
+a.button.icon-only:any-link,
+button.button.icon-only {
+  width: var(--button-height);
+  padding: 0;
+}
+
+/* states */
+a.button:any-link:hover,
+button.button:hover {
+  background-color: var(--button-background-hover);
+  color: var(--button-color);
+  text-decoration: none;
+}
+
+a.button:any-link:active,
+button.button:active {
+  background-color: var(--button-background-pressed);
+}
+
+a.button:any-link:focus-visible,
+button.button:focus-visible {
+  outline: 2px solid transparent; /* visible in forced colors mode */
+  box-shadow: var(--button-focus-ring);
+}
+
 a.button[aria-disabled="true"],
 button.button:disabled {
+  border-color: var(--button-disabled-border-color);
+  background-color: var(--button-disabled-background);
+  color: var(--button-disabled-color);
   cursor: not-allowed;
   pointer-events: none;
 }
 
+/* Priority Primary */
 a.button.primary,
 button.button.primary {
-  border-color: var(--text-color);
-  background-color: var(--text-color);
-  color: var(--background-color);
+  --button-background: #d0006f; /* color/primary/default */
+  --button-background-hover: #f4349a; /* color/primary/hover */
+  --button-background-pressed: #9f0457; /* color/primary/pressed */
+  --button-color: #fff; /* color/fg/on-action */
 }
 
-a.button.primary:hover,
-a.button.primary:focus-visible,
-button.button.primary:hover,
-button.button.primary:focus-visible {
-  border-color: var(--dark-color);
-  background-color: var(--dark-color);
-  color: var(--light-color);
-}
-
-a.button.primary[aria-disabled="true"],
-a.button.primary[aria-disabled="true"]:hover,
-a.button.primary[aria-disabled="true"]:focus-visible,
-button.button.primary:disabled,
-button.button.primary:disabled:hover,
-button.button.primary:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
-}
-
+/* Priority Secondary */
 a.button.secondary,
 button.button.secondary {
-  border-color: var(--text-color);
-  background-color: transparent;
-  color: var(--text-color);
+  --button-background: #fff; /* color/secondary/default */
+  --button-background-hover: #f2f2f2; /* color/secondary/hover */
+  --button-background-pressed: #e5e6e6; /* color/secondary/pressed */
+  --button-border-color: #d0006f; /* color/stroke/brand */
+  --button-color: #d0006f; /* color/fg/brand */
 }
 
-a.button.secondary:hover,
-a.button.secondary:focus-visible,
-button.button.secondary:hover,
-button.button.secondary:focus-visible {
-  border-color: var(--dark-color);
-  background-color: var(--light-color);
-  color: var(--dark-color);
+/* Priority Tertiary */
+a.button.tertiary,
+button.button.tertiary {
+  --button-background: #fff; /* color/tertiary/default */
+  --button-background-hover: #f2f2f2; /* color/tertiary/hover */
+  --button-background-pressed: #e5e6e6; /* color/tertiary/pressed */
+  --button-border-color: #4f5555; /* color/stroke/strong */
+  --button-color: #4f5555; /* color/fg/default */
 }
 
-a.button.secondary[aria-disabled="true"],
-a.button.secondary[aria-disabled="true"]:hover,
-a.button.secondary[aria-disabled="true"]:focus-visible,
-button.button.secondary:disabled,
-button.button.secondary:disabled:hover,
-button.button.secondary:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
-}
-
-/* high-impact call-to-action */
-a.button.accent,
-button.button.accent {
-  border-color: var(--link-color);
-  background-color: var(--link-color);
-  color: var(--background-color);
-}
-
-a.button.accent:hover,
-a.button.accent:focus-visible,
-button.button.accent:hover,
-button.button.accent:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
-}
-
-a.button.accent[aria-disabled="true"],
-a.button.accent[aria-disabled="true"]:hover,
-a.button.accent[aria-disabled="true"]:focus-visible,
-button.button.accent:disabled,
-button.button.accent:disabled:hover,
-button.button.accent:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
+/* Priority Ghost: text only; Disabled has no fill or border */
+a.button.ghost,
+button.button.ghost {
+  --button-background: transparent;
+  --button-background-hover: #f2f2f2; /* color/tertiary/hover */
+  --button-background-pressed: #e5e6e6; /* color/tertiary/pressed */
+  --button-color: #4f5555; /* color/fg/default */
+  --button-disabled-background: transparent;
+  --button-disabled-border-color: transparent;
 }
 
 main img {
@@ -295,6 +483,111 @@ main img {
   width: 100%;
 }
 
+/* button icons (optional left and right, Icon Only): tinted with the label colour */
+.button .icon {
+  flex: none;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  background-color: currentcolor;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+.button .icon img {
+  display: none;
+}
+
+/* oneAZ Figma Chips (307:3064): see styles/chips/README.md */
+.chip {
+  /* size: Large by default */
+  --chip-height: 28px;
+  --chip-padding-inline: 8px;
+  --chip-gap: 8px;
+  --chip-icon-size: 16px;
+  --chip-font-size: 16px;
+  --chip-line-height: 24px;
+  --chip-border-width: 1px;
+
+  /* state: Light by default */
+  --chip-background: #fff; /* color/surface/white */
+  --chip-border-color: #b0b5b5; /* color/stroke/default */
+  --chip-color: #4f5555; /* color/fg/default */
+  --chip-focus-color: #830051; /* color/stroke/focus */
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chip-gap);
+  height: var(--chip-height);
+
+  /* Figma strokes sit inside the pill, so the border is part of the padding */
+  padding-inline: calc(var(--chip-padding-inline) - var(--chip-border-width));
+  border: var(--chip-border-width) solid var(--chip-border-color);
+  border-radius: 9999px; /* radius/full */
+  background-color: var(--chip-background);
+  color: var(--chip-color);
+  font-family: var(--body-font-family);
+  font-size: var(--chip-font-size);
+  font-weight: 400;
+  line-height: var(--chip-line-height);
+  white-space: nowrap;
+}
+
+.chip.small {
+  --chip-height: 20px;
+  --chip-padding-inline: 4px;
+  --chip-gap: 4px;
+  --chip-icon-size: 12px;
+  --chip-font-size: 12px;
+  --chip-line-height: 18px;
+}
+
+.chip.dark {
+  --chip-background: #830051; /* color/surface/brand 2 */
+  --chip-border-color: transparent;
+  --chip-color: #fff; /* color/fg/on-action */
+}
+
+.chip.active {
+  --chip-background: #d0006f; /* color/surface/brand 1 */
+  --chip-border-color: transparent;
+  --chip-color: #fff; /* color/fg/on-action */
+}
+
+/* chip label link and remove button take the chip colour */
+.chip :is(a:any-link, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chip-gap);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chip :is(a:any-link, button):focus-visible {
+  outline: 2px solid var(--chip-focus-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* leading and trailing icons, tinted with the label colour */
+.chip .icon {
+  flex: none;
+  width: var(--chip-icon-size);
+  height: var(--chip-icon-size);
+  background-color: currentcolor;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+.chip .icon img {
+  display: none;
+}
+
 /* sections */
 main > .section {
   margin: 40px 0;
@@ -310,6 +603,12 @@ main > .section:first-of-type {
   margin-top: 0;
 }
 
+@media (width >= 1024px) {
+  :root {
+    --nav-height: 98px;
+  }
+}
+
 @media (width >= 900px) {
   main > .section > div {
     padding: 0 32px;
@@ -322,4 +621,13 @@ main .section.highlight {
   background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
+}
+
+/* body text sizes for a whole section: Style "text-large" (text-lg) or "text-small" (text-xs) */
+main .section.text-large {
+  font-size: var(--body-font-size-l);
+}
+
+main .section.text-small {
+  font-size: var(--body-font-size-xs);
 }

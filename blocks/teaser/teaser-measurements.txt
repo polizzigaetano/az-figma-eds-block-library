@@ -1,0 +1,77 @@
+VISUAL MEASUREMENT CHECKLIST FOR teaser (home-hero)
+====================================================
+Extracted from Figma node: 124:2112 "Teaser / Home Hero"
+  Large desktop  232:1863 | Large mobile  239:2040
+  Medium desktop 239:1908 | Medium mobile 239:2048 (from metadata)
+  Small desktop  239:1920 | Small mobile  239:2056 (from metadata)
+  Blocked content 124:2128
+Date: 2026-10-15
+Note: get_variable_defs returned 403 (account type), so values come from get_design_context.
+
+LAYOUT & DIMENSIONS
+☑ Container width: 1440px desktop / 375px mobile (source: w-[1440px] / w-[375px])
+☑ Container height: Large 480px desktop+mobile (source: h-[480px])
+☑ Container height: Medium 390px desktop+mobile (source: metadata height="390")
+☑ Container height: Small 270px desktop / 350px mobile (source: metadata height="270" / "350")
+☑ Container padding: top 0px right 32px bottom 0px left 32px desktop (source: px-[32px])
+☑ Container padding: top 0px right 16px bottom 0px left 16px mobile (source: px-[16px])
+☑ Grid/Flex gap: 16px (source: .Teaser / Hero Content gap-[16px])
+☑ Column count: 1 (source: flex-col)
+☑ Item width: 100%, max-width 1180px (source: w-full max-w-[1180px])
+☑ Item height: fit content, vertically centred (source: h-fit, justify-center)
+
+SPACING (EXACT PIXELS)
+☑ Section padding: 0px vertical (source: no py-* on Size=Large frame)
+☑ Item internal padding: 0px 0px 0px 0px (source: no padding on .Teaser / Hero Content)
+☑ Gap between items: 16px (source: gap-[16px])
+☑ Margin between text elements: 16px via gap, 0 margins (source: gap-[16px])
+☑ Image margin/padding: 0px, image fills container (source: absolute w-[1440px] h-[480px])
+☑ Blocked content padding: 24px (source: 124:2128 p-[24px])
+☑ Blocked content gap: 16px (source: Container gap-[16px])
+
+COLORS (EXACT HEX + OPACITY)
+☑ Background color: image + overlay #3f4444 (opacity: 75%) (source: bg-[#3f4444bf])
+☑ Primary text color: #ffffff (source: text-[#ffffff])
+☑ Secondary text color: #ffffff (source: subheading text-[#ffffff])
+☑ Accent/link color: #d0006f (source: Button bg-[#d0006f])
+☑ Border color: N/A (opacity: 0%) (source: no border classes)
+☑ Hover background: not defined in Figma, so a 15% darker #d0006f is assumed (source: none)
+☑ Hover text color: #ffffff (source: no hover state; keep text colour)
+
+TYPOGRAPHY (ALL PROPERTIES)
+☑ Heading font-family: Lexia, serif (source: font-['Lexia',sans-serif])
+☑ Heading font-size: 60px desktop+tablet (text-6xl) / 36px mobile (text-4xl) (source: text-[60px] / text-[36px])
+☑ Heading font-weight: 400 (source: font-normal)
+☑ Heading line-height: 76px desktop / 46px mobile (source: leading-[76px] / leading-[46px])
+☑ Heading letter-spacing: 0px (source: no tracking-* class)
+☑ Heading text-transform: none (source: no uppercase class)
+☑ Heading font-style: normal (source: no italic class)
+☑ Body font-family: Inter, sans-serif (source: font-['Inter',sans-serif])
+☑ Body font-size: 18px (text-lg) (source: text-[18px])
+☑ Body font-weight: 400 (source: font-normal)
+☑ Body line-height: 27px (source: leading-[27px])
+☑ Body letter-spacing: 0px (source: no tracking-* class)
+☑ Body font-style: normal (source: no italic class)
+☑ Button font: Inter 700 16px / 24px (source: font-bold text-[16px] leading-[24px])
+☑ Button size Large: min-height 54px, padding 0 16px (source: min-h-[54px] px-[16px])
+☑ Blocked title (H4): Lexia 400 24px / 31px, centred (source: 124:2131 text-[24px] leading-[31px] text-center)
+☑ Blocked body: Inter 400 16px / 24px, centred (text-base) (source: 124:2132 text-[16px] leading-[24px])
+
+BORDERS & RADIUS
+☑ Border width: 0px (source: no border classes)
+☑ Border style: none (source: no border classes)
+☑ Border color: N/A (source: no border present)
+☑ Border radius: container 0px (source: no rounded-* on frame); button 4px (source: rounded-[4px])
+
+SHADOWS (EXACT VALUES)
+☑ Box-shadow offset-x: 0px (source: no shadow classes)
+☑ Box-shadow offset-y: 0px (source: no shadow classes)
+☑ Box-shadow blur: 0px (source: no shadow classes)
+☑ Box-shadow spread: 0px (source: no shadow classes)
+☑ Box-shadow color: rgba(0,0,0,0) (source: no shadow classes)
+
+EFFECTS & TRANSITIONS
+☑ Hover transform: none (source: no hover state in Figma)
+☑ Transition duration: 150ms for button background (source: assumed, not in Figma)
+☑ Transition timing: ease (source: assumed, not in Figma)
+☑ Opacity changes: overlay 75% (source: bg-[#3f4444bf], bf = 191/255)

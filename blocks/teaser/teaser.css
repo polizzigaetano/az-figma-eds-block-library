@@ -1,0 +1,288 @@
+/* teaser block: values from teaser-measurements.txt and oneAZ Figma variables */
+
+.teaser-container .teaser-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.teaser {
+  /* ===== DESIGN SYSTEM COLORS ===== */
+  --teaser-color-title: #830051; /* color/fg/title */
+  --teaser-color-default: #4f5555; /* color/fg/default */
+  --teaser-color-on-action: #fff; /* color/fg/on-action */
+  --teaser-overlay-color: rgb(63 68 68 / 75%); /* #3f4444bf */
+  --teaser-fallback-background: #3f4444;
+
+  /* ===== LAYOUT ===== */
+  --teaser-max-width: 1440px;
+  --teaser-content-max-width: 1180px;
+  --teaser-padding-inline: 16px;
+  --teaser-gap: 16px; /* spacing/4 */
+  --teaser-border-radius: 0;
+
+  /* ===== TYPOGRAPHY: HEADING ===== */
+  --teaser-heading-font-family: lexia, georgia, serif;
+  --teaser-heading-font-size: 1.5rem;
+  --teaser-heading-line-height: calc(31 / 24);
+  --teaser-heading-font-weight: 400;
+  --teaser-heading-font-style: normal;
+  --teaser-heading-letter-spacing: 0;
+  --teaser-heading-text-transform: none;
+  --teaser-heading-color: var(--teaser-color-title);
+
+  /* ===== TYPOGRAPHY: BODY ===== */
+  --teaser-body-font-family: inter, arial, sans-serif;
+  --teaser-body-font-size: 1.125rem;
+  --teaser-body-line-height: 1.5;
+  --teaser-body-font-weight: 400;
+  --teaser-body-font-style: normal;
+  --teaser-body-letter-spacing: 0;
+  --teaser-body-color: var(--teaser-color-default);
+
+  /* buttons use the global Button styles (styles/button/README.md) */
+
+  /* ===== PLAY ICON (design only) ===== */
+  --teaser-play-width: 84px;
+  --teaser-play-height: 62px;
+  --teaser-play-background: rgb(0 0 0 / 50%); /* #00000080 */
+  --teaser-play-radius: 4px;
+  --teaser-play-icon-width: 29px;
+  --teaser-play-icon-height: 38.5px;
+  --teaser-play-icon-offset: 3.5px; /* Figma places the triangle 31px from the left of the 84px badge */
+  --teaser-play-icon-color: #efefef;
+
+  /* ===== BLOCKED CONTENT ===== */
+  --teaser-blocked-padding: 24px;
+  --teaser-blocked-gap: 16px;
+  --teaser-blocked-heading-font-size: 1.5rem;
+  --teaser-blocked-heading-line-height: calc(31 / 24);
+  --teaser-blocked-body-font-size: 1rem;
+  --teaser-blocked-body-line-height: 1.5;
+
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  margin-inline: auto;
+  padding-inline: var(--teaser-padding-inline);
+  border-radius: var(--teaser-border-radius);
+  overflow: hidden;
+}
+
+.teaser .teaser-media picture,
+.teaser .teaser-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.teaser .teaser-media img {
+  object-fit: cover;
+}
+
+/* title, body and button */
+.teaser .teaser-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--teaser-gap);
+  width: 100%;
+}
+
+.teaser :is(.teaser-content, .teaser-blocked) > * {
+  margin: 0;
+}
+
+.teaser :is(.teaser-content, .teaser-blocked) :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--teaser-heading-font-family);
+  font-size: var(--teaser-heading-font-size);
+  font-style: var(--teaser-heading-font-style);
+  font-weight: var(--teaser-heading-font-weight);
+  line-height: var(--teaser-heading-line-height);
+  letter-spacing: var(--teaser-heading-letter-spacing);
+  text-transform: var(--teaser-heading-text-transform);
+  text-wrap: balance;
+  color: var(--teaser-heading-color);
+}
+
+.teaser :is(.teaser-content, .teaser-blocked) p {
+  font-family: var(--teaser-body-font-family);
+  font-size: var(--teaser-body-font-size);
+  font-style: var(--teaser-body-font-style);
+  font-weight: var(--teaser-body-font-weight);
+  line-height: var(--teaser-body-line-height);
+  letter-spacing: var(--teaser-body-letter-spacing);
+  text-wrap: pretty;
+  color: var(--teaser-body-color);
+}
+
+.teaser :is(.teaser-content, .teaser-blocked) a:any-link:not(.button) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ===== BLOCKED CONTENT: overlay replaces the teaser content (design only) ===== */
+.teaser.blocked .teaser-content {
+  visibility: hidden;
+}
+
+.teaser .teaser-blocked {
+  --teaser-heading-color: var(--teaser-color-on-action);
+  --teaser-body-color: var(--teaser-color-on-action);
+
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--teaser-blocked-gap);
+  padding: var(--teaser-blocked-padding);
+  background-color: var(--teaser-overlay-color);
+  text-align: center;
+}
+
+.teaser .teaser-blocked :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--teaser-blocked-heading-font-size);
+  line-height: var(--teaser-blocked-heading-line-height);
+}
+
+.teaser .teaser-blocked p {
+  font-size: var(--teaser-blocked-body-font-size);
+  line-height: var(--teaser-blocked-body-line-height);
+}
+
+/* ===== HOME HERO (mobile, 375px design) ===== */
+.teaser.home-hero {
+  --teaser-min-height: 480px;
+  --teaser-padding-block: 24px;
+  --teaser-heading-font-size: 2.25rem;
+  --teaser-heading-line-height: calc(46 / 36);
+  --teaser-heading-color: var(--teaser-color-on-action);
+  --teaser-body-color: var(--teaser-color-on-action);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: var(--teaser-max-width);
+  min-height: var(--teaser-min-height);
+  padding-block: var(--teaser-padding-block);
+  background-color: var(--teaser-fallback-background);
+}
+
+.teaser.home-hero.medium {
+  --teaser-min-height: 390px;
+}
+
+.teaser.home-hero.small {
+  --teaser-min-height: 350px;
+}
+
+.teaser.home-hero .teaser-media {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+}
+
+.teaser.home-hero .teaser-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--teaser-overlay-color);
+}
+
+.teaser.home-hero.blocked .teaser-media::after {
+  content: none;
+}
+
+.teaser.home-hero .teaser-content {
+  max-width: var(--teaser-content-max-width);
+}
+
+/* ===== TEXT+IMAGE (mobile, 375px design: image above text) ===== */
+.teaser.text-image {
+  --teaser-heading-font-size: 1.625rem; /* Headings/Lexia-26 */
+  --teaser-heading-line-height: calc(34 / 26);
+  --teaser-heading-font-weight: 700;
+  --teaser-image-aspect-ratio: 375 / 220;
+  --teaser-columns-gap: 32px; /* spacing/8 */
+
+  display: grid;
+  gap: var(--teaser-gap);
+  max-width: calc(var(--teaser-content-max-width) + 2 * var(--teaser-padding-inline));
+}
+
+.teaser.text-image .teaser-media {
+  position: relative;
+  align-self: start;
+  aspect-ratio: var(--teaser-image-aspect-ratio);
+}
+
+/* play icon over the image, design only */
+.teaser.text-image.video .teaser-media::before,
+.teaser.text-image.video .teaser-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: none;
+}
+
+.teaser.text-image.video .teaser-media::before {
+  width: var(--teaser-play-width);
+  height: var(--teaser-play-height);
+  border-radius: var(--teaser-play-radius);
+  background-color: var(--teaser-play-background);
+}
+
+.teaser.text-image.video .teaser-media::after {
+  width: var(--teaser-play-icon-width);
+  height: var(--teaser-play-icon-height);
+  translate: var(--teaser-play-icon-offset) 0;
+  background-color: var(--teaser-play-icon-color);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* ===== TABLET (768px) AND DESKTOP (1440px design) ===== */
+@media (width >= 768px) {
+  .teaser {
+    --teaser-padding-inline: 32px;
+  }
+
+  /* Figma: tablet uses the desktop Home Hero */
+  .teaser.home-hero {
+    --teaser-heading-font-size: 3.75rem;
+    --teaser-heading-line-height: calc(76 / 60);
+  }
+
+  .teaser.home-hero.small {
+    --teaser-min-height: 270px;
+  }
+
+  /* image on either side, text top-aligned */
+  .teaser.text-image {
+    --teaser-heading-font-size: 1.5rem; /* Headings/Lexia-24 */
+    --teaser-heading-line-height: calc(31 / 24);
+    --teaser-heading-font-weight: 400;
+    --teaser-image-aspect-ratio: 16 / 9; /* aspect/video */
+
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: var(--teaser-columns-gap);
+  }
+
+  .teaser.text-image.right .teaser-media {
+    order: 1;
+  }
+}
+
+@media (width >= 1024px) {
+  /* desktop: text column matches the image height, button at the bottom */
+  .teaser.text-image {
+    align-items: stretch;
+  }
+
+  .teaser.text-image .teaser-content > :nth-child(1 of .button-wrapper) {
+    margin-block-start: auto;
+  }
+}
